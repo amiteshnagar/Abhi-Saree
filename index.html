@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character encoding for standard text rendering -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive viewport settings for mobile and desktop screens -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Short description for search engines and browser previews -->
+    <meta name="description" content="Abhi Saree Collection - Discover authentic, elegant, and timeless sarees for weddings, celebrations, and everyday grace.">
+
+    <!-- Browser tab title -->
+    <title>Abhi Saree Collection</title>
+
+    <!-- Link to external CSS stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Section: Brand Identity and Main Navigation -->
+    <header class="site-header">
+        <div class="header-container">
+            <!-- Brand Identity: Official Logo and Business Name -->
+            <div class="brand">
+                <img src="logo/logo.png" alt="Abhi Saree Collection Logo" class="brand-logo" width="60" height="60">
+                <h1 class="brand-name">Abhi Saree Collection</h1>
+            </div>
+
+            <!-- Mobile Navigation Toggle Button (Phase 5.2) -->
+            <button type="button" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-controls="primary-nav" aria-expanded="false">
+                <span class="menu-toggle-icon" aria-hidden="true">&#9776;</span>
+                <span class="menu-toggle-text">Menu</span>
+            </button>
+
+            <!-- Main Semantic Navigation -->
+            <nav class="main-nav" id="primary-nav" aria-label="Main Navigation">
+                <ul class="nav-list" id="nav-list">
+                    <li><a href="#welcome" class="nav-link">Home</a></li>
+                    <li><a href="#collections" class="nav-link">Collections</a></li>
+                    <li><a href="#about" class="nav-link">About Us</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- 1. Welcome Section (Target of Home nav link) -->
+        <section id="welcome" class="welcome-section">
+            <h2>Welcome to Abhi Saree Collection</h2>
+            <p>Explore our exquisite range of handcrafted sarees, traditional weaves, and contemporary designs for every special occasion.</p>
+
+            <!-- Phase 5.1: First JavaScript Test Interaction -->
+            <div class="interactive-test-box">
+                <button type="button" id="test-interaction-btn" class="test-btn">Check Boutique Status</button>
+                <p id="test-interaction-msg" class="test-msg" aria-live="polite">Click the button above to check today's boutique status.</p>
+            </div>
+        </section>
+
+        <!-- 2. Featured Saree Collection (Target of Collections nav link) -->
+        <section id="collections" class="featured-section" aria-labelledby="collections-heading">
+            <div class="section-header">
+                <h2 id="collections-heading" class="section-title">Featured Saree Collection</h2>
+                <p class="section-subtitle">A curated preview of our finest handloom weaves, celebratory silks, and lightweight party wear.</p>
+                <p class="sample-notice"><em>* Sample showcase: items and reference prices are displayed for design demonstration.</em></p>
+            </div>
+
+            <!-- Product Category Filter Controls (Phase 5.4) -->
+            <div class="filter-controls" role="group" aria-label="Filter products by fabric category">
+                <button type="button" class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+                <button type="button" class="filter-btn" data-filter="silk" aria-pressed="false">Silk</button>
+                <button type="button" class="filter-btn" data-filter="cotton" aria-pressed="false">Cotton</button>
+                <button type="button" class="filter-btn" data-filter="georgette" aria-pressed="false">Georgette</button>
+            </div>
+
+            <!-- Product Grid: Dynamically populated from demonstration data array in js/script.js (Phase 5.3) -->
+            <div class="product-grid" id="product-grid">
+                <!-- Demonstration product cards are dynamically rendered by JavaScript DOM APIs -->
+                <noscript>
+                    <p class="sample-notice">Please enable JavaScript to view the dynamic product showcase.</p>
+                </noscript>
+            </div>
+        </section>
+
+        <!-- 3. Category Highlights Section -->
+        <section id="categories" class="categories-section" aria-labelledby="categories-heading">
+            <div class="section-header">
+                <h2 id="categories-heading" class="section-title">Explore by Category</h2>
+                <p class="section-subtitle">Discover our complete boutique offerings curated for timeless elegance.</p>
+            </div>
+
+            <div class="categories-grid">
+                <!-- Category 1: Sarees (links to active showcase) -->
+                <a href="#collections" class="category-card" aria-label="Explore Sarees category">
+                    <h3 class="category-name">Sarees</h3>
+                    <p class="category-desc">Banarasi, Kanjeevaram, Chanderi, and party-wear festive drapes.</p>
+                    <span class="category-status active-status">Featured Showcase &uarr;</span>
+                </a>
+
+                <!-- Category 2: Suits (documented future catalog) -->
+                <a href="#categories" class="category-card" aria-label="Suits category - in preparation">
+                    <h3 class="category-name">Suits</h3>
+                    <p class="category-desc">Handcrafted Anarkalis, straight suits, and festive salwar sets.</p>
+                    <span class="category-status">Catalog In Preparation</span>
+                </a>
+
+                <!-- Category 3: Blouses (documented future catalog) -->
+                <a href="#categories" class="category-card" aria-label="Blouses category - in preparation">
+                    <h3 class="category-name">Blouses</h3>
+                    <p class="category-desc">Designer embroidered, brocade, and tailored festive blouses.</p>
+                    <span class="category-status">Catalog In Preparation</span>
+                </a>
+
+                <!-- Category 4: Other Clothing (documented future catalog) -->
+                <a href="#categories" class="category-card" aria-label="Other Clothing category - in preparation">
+                    <h3 class="category-name">Other Clothing</h3>
+                    <p class="category-desc">Artisanal dupattas, festive lehengas, and curated ethnic wear.</p>
+                    <span class="category-status">Catalog In Preparation</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 4. Customer Trust & About Section (Target of About Us nav link) -->
+        <section id="about" class="trust-section" aria-labelledby="trust-heading">
+            <div class="section-header">
+                <h2 id="trust-heading" class="section-title">Why Choose Abhi Saree Collection</h2>
+                <p class="section-subtitle">Our commitment to artisanal craftsmanship, authentic zari, and dedicated customer care.</p>
+            </div>
+
+            <div class="trust-grid">
+                <!-- Trust Card 1 -->
+                <article class="trust-card">
+                    <span class="trust-badge">Quality Promise</span>
+                    <h3 class="trust-title">Handpicked Authenticity</h3>
+                    <p class="trust-text">"Every weave in our boutique is individually inspected for fabric purity, authentic zari threadwork, and artisanal finish."</p>
+                    <span class="trust-footer">Boutique Standard &bull; Verified Handloom</span>
+                </article>
+
+                <!-- Trust Card 2: Documented Sample Placeholder -->
+                <article class="trust-card placeholder-trust">
+                    <span class="trust-badge">Customer Trust Placeholder</span>
+                    <h3 class="trust-title">Verified Buyer Reviews</h3>
+                    <p class="trust-text"><em>Sample Testimonial Slot: Customer reviews from verified buyers will be highlighted here in future updates to share authentic shopping experiences.</em></p>
+                    <span class="trust-footer">Sample Placeholder &bull; Real Reviews Coming Soon</span>
+                </article>
+
+                <!-- Trust Card 3 -->
+                <article class="trust-card">
+                    <span class="trust-badge">Service Commitment</span>
+                    <h3 class="trust-title">Care &amp; Delivery</h3>
+                    <p class="trust-text">"Personalized saree styling advisory, secure gift packing, and reliable door-to-door delivery for every celebration."</p>
+                    <span class="trust-footer">Customer Care &bull; Nationwide Support</span>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section (Target of Contact nav link) -->
+    <footer id="contact">
+        <p>&copy; 2026 Abhi Saree Collection. All rights reserved.</p>
+    </footer>
+
+    <!-- Link to external JavaScript file (future interactivity) -->
+    <script src="js/script.js"></script>
+</body>
+</html>

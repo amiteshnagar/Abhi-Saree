@@ -1,0 +1,22 @@
+/* ==========================================================================
+   Abhi Saree Collection — Global Web Fonts & Base Styles
+   ========================================================================== */
+
+/* Import brand Google Fonts: Playfair Display (headings) & Poppins (body) */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
+/* Basic document reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

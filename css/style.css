@@ -1,0 +1,769 @@
+/* ==========================================================================
+   Abhi Saree Collection — Main Stylesheet
+   Phase 4: Product Showcase and UI
+   Brand Palette:
+     - Warm Ivory:    #FAF6F0 (Page background & light accents)
+     - Deep Maroon:   #6B1E2B (Headings & primary brand colour)
+     - Antique Gold:  #C9A15C (Borders, divider lines & subtle accents)
+     - Warm Charcoal: #2B2523 (Body text & secondary text)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Import Google Fonts
+   Headings: Playfair Display | Body: Poppins
+   -------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* --------------------------------------------------------------------------
+   CSS Variables (Design Tokens)
+   Central place to manage brand colours and typography
+   -------------------------------------------------------------------------- */
+:root {
+    --color-warm-ivory: #FAF6F0;
+    --color-deep-maroon: #6B1E2B;
+    --color-antique-gold: #C9A15C;
+    --color-warm-charcoal: #2B2523;
+    --color-white: #FFFFFF;
+    
+    --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   1. CSS Reset & Box Sizing
+   Ensures consistent spacing, box-sizing, and zero horizontal overflow
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   2. Body & Global Typography
+   Sets default background, font family, text colour, and page flow
+   -------------------------------------------------------------------------- */
+body {
+    background-color: var(--color-warm-ivory);
+    color: var(--color-warm-charcoal);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --------------------------------------------------------------------------
+   3. Header & Brand Navigation
+   Clean boutique banner aligning the official logo and navigation
+   -------------------------------------------------------------------------- */
+.site-header {
+    background-color: var(--color-white);
+    border-bottom: 2px solid var(--color-antique-gold);
+    box-shadow: 0 2px 8px rgba(43, 37, 35, 0.04);
+    width: 100%;
+}
+
+.header-container {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Brand Group: Logo and Business Name */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+}
+
+.brand-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 1px solid var(--color-antique-gold);
+    box-shadow: 0 2px 6px rgba(43, 37, 35, 0.08);
+    flex-shrink: 0;
+}
+
+.brand-name {
+    font-family: var(--font-heading);
+    color: var(--color-deep-maroon);
+    font-size: clamp(1.2rem, 3.5vw, 1.65rem);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+}
+
+/* Mobile Navigation Toggle Button (hidden on desktop screens) */
+.menu-toggle {
+    display: none;
+    align-items: center;
+    gap: 0.45rem;
+    background-color: var(--color-white);
+    color: var(--color-deep-maroon);
+    border: 1px solid var(--color-antique-gold);
+    border-radius: 6px;
+    padding: 0.45rem 0.85rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-toggle:hover {
+    background-color: var(--color-warm-ivory);
+    border-color: var(--color-deep-maroon);
+}
+
+.menu-toggle:focus-visible {
+    outline: 2px solid var(--color-antique-gold);
+    outline-offset: 3px;
+}
+
+.menu-toggle-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.menu-toggle-text {
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* Semantic Navigation */
+.main-nav {
+    display: block;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.nav-link {
+    display: inline-block;
+    color: var(--color-warm-charcoal);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.35rem 0.2rem;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Visible Hover and Keyboard Focus States */
+.nav-link:hover {
+    color: var(--color-deep-maroon);
+    border-bottom-color: var(--color-antique-gold);
+}
+
+.nav-link:focus-visible {
+    outline: 2px solid var(--color-antique-gold);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Main Content Area & Shared Section Headers
+   -------------------------------------------------------------------------- */
+main {
+    flex: 1;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 2.25rem;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    color: var(--color-deep-maroon);
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+}
+
+.section-subtitle {
+    color: var(--color-warm-charcoal);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 650px;
+    margin: 0.5rem auto 0;
+}
+
+.sample-notice {
+    font-size: 0.85rem;
+    color: #8C7355;
+    margin-top: 0.4rem;
+}
+
+/* Welcome Section */
+.welcome-section {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(201, 161, 92, 0.25);
+}
+
+.welcome-section h2 {
+    font-family: var(--font-heading);
+    color: var(--color-deep-maroon);
+    font-size: clamp(1.3rem, 4vw, 1.75rem);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+}
+
+.welcome-section p {
+    color: var(--color-warm-charcoal);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* Phase 5.1: First JavaScript Test Interaction */
+.interactive-test-box {
+    margin-top: 1.75rem;
+    padding: 1.25rem 1rem;
+    background-color: var(--color-white);
+    border: 1px solid rgba(201, 161, 92, 0.35);
+    border-radius: 8px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 2px 8px rgba(43, 37, 35, 0.04);
+}
+
+.test-btn {
+    background-color: var(--color-deep-maroon);
+    color: var(--color-white);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.65rem 1.4rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.test-btn:hover {
+    background-color: #531621;
+    transform: translateY(-1px);
+}
+
+.test-btn:focus-visible {
+    outline: 2px solid var(--color-antique-gold);
+    outline-offset: 3px;
+}
+
+.test-msg {
+    margin-top: 0.85rem;
+    font-size: 0.9rem;
+    color: var(--color-warm-charcoal);
+    line-height: 1.5;
+    transition: color 0.3s ease;
+}
+
+.test-msg.updated {
+    color: var(--color-deep-maroon);
+    font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   5. Featured Saree Collection (Product Showcase Grid)
+   -------------------------------------------------------------------------- */
+.featured-section {
+    margin-bottom: 4rem;
+}
+
+/* Product Category Filter Controls (Phase 5.4) */
+.filter-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 2rem;
+}
+
+.filter-btn {
+    background-color: var(--color-white);
+    color: var(--color-warm-charcoal);
+    border: 1px solid rgba(201, 161, 92, 0.45);
+    border-radius: 20px;
+    padding: 0.45rem 1.2rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.filter-btn:hover {
+    background-color: var(--color-warm-ivory);
+    border-color: var(--color-deep-maroon);
+    color: var(--color-deep-maroon);
+    transform: translateY(-1px);
+}
+
+.filter-btn:focus-visible {
+    outline: 2px solid var(--color-antique-gold);
+    outline-offset: 3px;
+}
+
+/* Active Filter State */
+.filter-btn.active,
+.filter-btn[aria-pressed="true"] {
+    background-color: var(--color-deep-maroon);
+    color: var(--color-white);
+    border-color: var(--color-deep-maroon);
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(107, 30, 43, 0.18);
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.product-card {
+    background-color: var(--color-white);
+    border: 1px solid rgba(201, 161, 92, 0.35);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(43, 37, 35, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(107, 30, 43, 0.08);
+    border-color: var(--color-antique-gold);
+}
+
+.product-image {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid rgba(201, 161, 92, 0.25);
+    background-color: var(--color-warm-ivory);
+}
+
+.product-content {
+    padding: 1.25rem 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.product-category {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--color-antique-gold);
+    margin-bottom: 0.35rem;
+}
+
+.product-name {
+    font-family: var(--font-heading);
+    color: var(--color-deep-maroon);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+}
+
+.product-desc {
+    font-size: 0.875rem;
+    color: var(--color-warm-charcoal);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex: 1;
+}
+
+.product-meta {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px dashed rgba(201, 161, 92, 0.35);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.product-price {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-deep-maroon);
+}
+
+.sample-tag {
+    font-size: 0.72rem;
+    color: #7A726E;
+    font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   6. Category Highlights Section
+   -------------------------------------------------------------------------- */
+.categories-section {
+    margin-bottom: 4rem;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+.category-card {
+    background-color: var(--color-white);
+    border: 1px solid rgba(201, 161, 92, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-antique-gold);
+    background-color: #FFFDF9;
+    box-shadow: 0 6px 16px rgba(107, 30, 43, 0.06);
+}
+
+.category-card:focus-visible {
+    outline: 2px solid var(--color-antique-gold);
+    outline-offset: 3px;
+}
+
+.category-name {
+    font-family: var(--font-heading);
+    color: var(--color-deep-maroon);
+    font-size: 1.25rem;
+    margin-bottom: 0.4rem;
+}
+
+.category-desc {
+    font-size: 0.85rem;
+    color: var(--color-warm-charcoal);
+    line-height: 1.5;
+    margin-bottom: 0.85rem;
+    flex: 1;
+}
+
+.category-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #8C7355;
+}
+
+.category-status.active-status {
+    color: var(--color-deep-maroon);
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   7. Customer Trust Section (Brand Philosophy & Testimonials)
+   -------------------------------------------------------------------------- */
+.trust-section {
+    margin-bottom: 4rem;
+}
+
+.trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.trust-card {
+    background-color: var(--color-white);
+    border: 1px solid rgba(201, 161, 92, 0.3);
+    border-radius: 8px;
+    padding: 1.75rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(43, 37, 35, 0.03);
+}
+
+.trust-card.placeholder-trust {
+    border: 1px dashed var(--color-antique-gold);
+    background-color: #FCFAF6;
+}
+
+.trust-badge {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--color-antique-gold);
+    margin-bottom: 0.5rem;
+}
+
+.trust-title {
+    font-family: var(--font-heading);
+    color: var(--color-deep-maroon);
+    font-size: 1.15rem;
+    margin-bottom: 0.65rem;
+}
+
+.trust-text {
+    font-size: 0.9rem;
+    color: var(--color-warm-charcoal);
+    line-height: 1.65;
+    margin-bottom: 1rem;
+    flex: 1;
+}
+
+.trust-footer {
+    font-size: 0.75rem;
+    color: #7A726E;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(201, 161, 92, 0.2);
+}
+
+/* --------------------------------------------------------------------------
+   8. Footer Section
+   -------------------------------------------------------------------------- */
+footer {
+    border-top: 1px solid rgba(201, 161, 92, 0.4);
+    background-color: var(--color-warm-ivory);
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+
+footer p {
+    color: var(--color-warm-charcoal);
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+}
+
+/* --------------------------------------------------------------------------
+   9. Responsive Design (Desktop, Tablet & Mobile Breakpoints)
+   -------------------------------------------------------------------------- */
+/* Large Tablet / Medium Desktop (992px and below) */
+@media (max-width: 992px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.15rem;
+    }
+
+    .trust-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+/* Tablet & Medium Screens (768px and below) */
+@media (max-width: 768px) {
+    .header-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.85rem 1.25rem;
+    }
+
+    .brand {
+        flex: 1 1 auto;
+        justify-content: flex-start;
+    }
+
+    /* Show mobile menu button at 768px and below */
+    .menu-toggle {
+        display: inline-flex;
+    }
+
+    /* Hide navigation by default when closed on mobile */
+    .main-nav {
+        display: none;
+        width: 100%;
+        order: 3;
+    }
+
+    /* Reveal navigation when open */
+    .main-nav.is-open {
+        display: block;
+    }
+
+    /* Display mobile navigation links vertically */
+    .nav-list {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.4rem;
+        padding: 0.85rem 0 0.35rem;
+        border-top: 1px solid rgba(201, 161, 92, 0.3);
+    }
+
+    .nav-link {
+        display: block;
+        text-align: center;
+        padding: 0.65rem 1rem;
+        font-size: 0.95rem;
+        border-bottom: 1px solid rgba(201, 161, 92, 0.15);
+        border-radius: 4px;
+    }
+
+    .nav-link:hover {
+        background-color: rgba(201, 161, 92, 0.1);
+        border-bottom-color: rgba(201, 161, 92, 0.3);
+    }
+
+    .trust-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile Screens (580px and below) */
+@media (max-width: 580px) {
+    main {
+        padding: 2rem 1rem;
+    }
+
+    .welcome-section {
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+    }
+
+    .featured-section,
+    .categories-section,
+    .trust-section {
+        margin-bottom: 3rem;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+
+    .product-image {
+        height: 240px;
+    }
+}
+
+/* Small Mobile Screens (480px and below) */
+@media (max-width: 480px) {
+    .header-container {
+        padding: 0.75rem 0.75rem;
+        gap: 0.75rem;
+    }
+
+    .brand {
+        gap: 0.6rem;
+    }
+
+    .brand-logo {
+        width: 44px;
+        height: 44px;
+    }
+
+    .nav-link {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.75rem;
+    }
+}
+
+/* Very Small Mobile Screens (360px down to 320px) */
+@media (max-width: 360px) {
+    .header-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 0.6rem 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .brand {
+        justify-content: center;
+        gap: 0.45rem;
+    }
+
+    .brand-logo {
+        width: 38px;
+        height: 38px;
+    }
+
+    .brand-name {
+        font-size: 1.05rem;
+    }
+
+    .menu-toggle {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .nav-link {
+        font-size: 0.85rem;
+        padding: 0.55rem 0.5rem;
+    }
+
+    main {
+        padding: 1.5rem 0.5rem;
+    }
+
+    .product-content {
+        padding: 1rem 0.75rem;
+    }
+
+    .category-card,
+    .trust-card {
+        padding: 1.25rem 0.85rem;
+    }
+}
+
