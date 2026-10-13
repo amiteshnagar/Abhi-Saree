@@ -3,19 +3,23 @@
 // Phase 6.9: Shopping Cart State & Array.prototype.reduce()
 // =============================================================================
 
-// 1. Import React's useState and useEffect hooks
-import { useState, useEffect } from 'react'
+// 1. Import React's useState, useEffect, and useReducer hooks
+import { useState, useEffect, useReducer } from 'react'
 
 // 2. Import child components
 import Header from './components/Header.jsx'
 import WelcomeSection from './components/WelcomeSection.jsx'
 import LifecycleDemo from './components/LifecycleDemo.jsx'
+import ReducerLearningSection from './components/ReducerLearningSection.jsx'
 import AddProductForm from './components/AddProductForm.jsx'
 import ProductCard from './components/ProductCard.jsx'
 import ProductDetailModal from './components/ProductDetailModal.jsx'
 import CartSummary from './components/CartSummary.jsx'
 
-// 3. Import CSS styles for the practice card
+// 3. Import Cart Reducer (Phase 6.12)
+import { cartReducer, initialCartState } from './reducers/cartReducer.js'
+
+// 4. Import CSS styles for the practice card
 import './App.css'
 
 // Categories available for filtering
@@ -112,11 +116,11 @@ function App() {
   // Selected Product State for Modal (preserved from Phase 6.8)
   const [selectedProduct, setSelectedProduct] = useState(null)
 
-  // CONCEPT 1: Shopping Cart State (Phase 6.9)
-  // `cart` is an array of cart item objects.
-  // Each item contains: { id, name, category, price, numericPrice, quantity }
-  // Initialized to an empty array [] so the cart starts empty.
-  const [cart, setCart] = useState([])
+  // CONCEPT 1: Shopping Cart State with useReducer (Phase 6.12)
+  // Replaced useState([]) with useReducer(cartReducer, initialCartState).
+  // All state transitions (ADD_TO_CART, INCREMENT, DECREMENT, REMOVE_ITEM, CLEAR_CART)
+  // are consolidated inside cartReducer.js rather than scattered across event handlers.
+  const [cart, dispatchCart] = useReducer(cartReducer, initialCartState)
 
   // Independent status message state (preserved from Phase 6.1)
   const [statusMessage, setStatusMessage] = useState('Welcome to React!')
@@ -217,57 +221,44 @@ function App() {
     setSelectedProduct(null)
   }
 
-  // CONCEPT 2: Adding Items to Cart (Immutable Updates)
-  // When adding an item, we check if it is already in the cart:
-  // - If YES: we map over the array and increment its `quantity` by 1.
-  // - If NO: we append the new product object with `quantity: 1`.
-  // Notice we NEVER mutate prevCart directly (no prevCart.push)!
+  // ===========================================================================
+  // 🎓 DISPATCHING ACTIONS TO THE REDUCER (Phase 6.12):
+  // Instead of calling setCart(prevCart => ...), we send action objects to the reducer.
+  // The reducer receives (state, action) and returns the updated state immutably.
+  // ===========================================================================
+
+  // ACTION 1: ADD_TO_CART
   function handleAddToCart(product) {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id)
-
-      if (existingItem) {
-        return prevCart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      } else {
-        return [
-          ...prevCart,
-          {
-            id: product.id,
-            name: product.name,
-            category: product.category,
-            price: product.price,
-            numericPrice: product.numericPrice,
-            quantity: 1,
-          },
-        ]
-      }
-    })
+    dispatchCart({ type: 'ADD_TO_CART', payload: product })
   }
 
-  // CONCEPT 3: Updating Quantities & Removing at Zero
-  // When a user clicks `+` (delta = +1) or `−` (delta = -1):
-  // - We compute the new quantity.
-  // - If new quantity <= 0, .filter() removes it from the cart array automatically!
-  function handleUpdateQuantity(productId, delta) {
-    setCart((prevCart) => {
-      return prevCart
-        .map((item) => {
-          if (item.id === productId) {
-            return { ...item, quantity: item.quantity + delta }
-          }
-          return item
-        })
-        .filter((item) => item.quantity > 0)
-    })
+  // ACTION 2: INCREMENT
+  function handleIncrement(productId) {
+    dispatchCart({ type: 'INCREMENT', payload: { id: productId } })
   }
 
-  // Resetting Cart back to empty
+  // ACTION 3: DECREMENT
+  function handleDecrement(productId) {
+    dispatchCart({ type: 'DECREMENT', payload: { id: productId } })
+  }
+
+  // ACTION 4: REMOVE_ITEM
+  function handleRemoveItem(productId) {
+    dispatchCart({ type: 'REMOVE_ITEM', payload: { id: productId } })
+  }
+
+  // ACTION 5: CLEAR_CART
   function handleClearCart() {
-    setCart([])
+    dispatchCart({ type: 'CLEAR_CART' })
+  }
+
+  // Backward-compatible helper for existing tests & quantity buttons
+  function handleUpdateQuantity(productId, delta) {
+    if (delta > 0) {
+      dispatchCart({ type: 'INCREMENT', payload: { id: productId } })
+    } else {
+      dispatchCart({ type: 'DECREMENT', payload: { id: productId } })
+    }
   }
 
   // Event handler for original test interaction button (preserved)
@@ -286,6 +277,9 @@ function App() {
 
         {/* Child Component 3: React useEffect & Lifecycle Demonstration (Phase 6.10) */}
         <LifecycleDemo />
+
+        {/* Child Component: React useReducer Learning Demonstration (Phase 6.12) */}
+        <ReducerLearningSection />
 
         {/* Child Component 4: Dynamic Product List with Search, Filter, Modal & Cart */}
         <section className="practice-products-section">
@@ -421,11 +415,14 @@ function App() {
           )}
         </section>
 
-        {/* Child Component 5: Shopping Cart Summary (Phase 6.9) */}
+        {/* Child Component 5: Shopping Cart Summary (Phase 6.9 & Phase 6.12: useReducer) */}
         <CartSummary
           cart={cart}
-          onUpdateQuantity={handleUpdateQuantity}
+          onIncrement={handleIncrement}
+          onDecrement={handleDecrement}
+          onRemoveItem={handleRemoveItem}
           onClearCart={handleClearCart}
+          onUpdateQuantity={handleUpdateQuantity}
         />
 
         {/* Interactive Practice Box (useState & onClick preserved) */}

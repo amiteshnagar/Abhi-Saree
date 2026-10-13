@@ -26,7 +26,9 @@ Welcome to the **Abhi Saree Collection** website codebase! This project is being
 | **Phase 6.8** | Product Detail Modal & Dialog Accessibility | **Complete** | Created modular `ProductDetailModal.jsx`, `selectedProduct` state in `App.jsx`, accessible "View Details" buttons and card click triggers, backdrop click dismissal with `stopPropagation`, Escape key listener, body scroll locking via `useEffect`, full compatibility with search/filter/addition, oxlint (0 errors) & vite build verified, and 26/26 browser CDP tests passed with 0 console errors. |
 | **Phase 6.9** | React Shopping Cart Fundamentals & reduce() | **Complete** | Added "Add to Cart" action to cards, cart state in `App.jsx`, modular `CartSummary.jsx`, immutable addition & quantity updates (+ / −), auto-removal at zero quantity, line & grand totals computed with `Array.prototype.reduce()`, empty-cart notice, Clear Cart button, lint (oxlint 0 errors) & build verified, and 33/33 browser CDP tests passed with 0 console errors. |
 | **Phase 6.10** | React useEffect & Lifecycle Fundamentals | **Complete** | Added `LifecycleDemo.jsx` demonstrating mount (`[]`), dependency updates (`[actionCount]`), verifiable `clearInterval` timer cleanup on pause/unmount, derived live product count banner calculated directly in render, single `document.title` effect with cleanup restoring previous title, oxlint (0 errors) & vite build verified, and 36/36 browser CDP tests passed with 0 console errors. |
-| **Phase 6.11+** | Catalog Expansion & Architecture | *Pending* | Saree sorting (by price/name), checkout flow simulation, and full boutique migration. |
+| **Phase 6.11** | React Forms & Controlled Inputs | **Complete** | Added `AddProductForm.jsx` with controlled inputs (`value` and `onChange`), client-side validation without browser alerts, `event.preventDefault()`, collision-safe `crypto.randomUUID()` unique IDs, oxlint (0 errors) & vite build verified, and 36/36 browser CDP tests passed with 0 console errors. |
+| **Phase 6.12** | React useReducer State Management | **Complete** | Created `src/reducers/cartReducer.js` with pure reducer handling `ADD_TO_CART`, `INCREMENT`, `DECREMENT`, `REMOVE_ITEM`, and `CLEAR_CART` via immutable state transitions, integrated `useReducer` in `App.jsx`, added `ReducerLearningSection.jsx`, dedicated cart remove buttons, oxlint (0 errors) & vite build verified, and 38/38 browser CDP tests passed with 0 console errors. |
+| **Phase 6.13+** | Catalog Expansion & Architecture | *Pending* | Saree sorting (by price/name), checkout flow simulation, and full boutique migration. |
 
 ---
 
@@ -47,17 +49,21 @@ Abhi_Sareee/
 │   ├── package.json    # React dependencies & scripts (npm run dev)
 │   └── src/
 │       ├── main.jsx    # React DOM entry point (createRoot)
-│       ├── App.jsx     # Parent orchestrator component (composes Header + WelcomeSection + ProductCards + useState)
+│       ├── App.jsx     # Parent orchestrator component (Header, ProductCards, useReducer cart, forms)
 │       ├── App.css     # Practice card ivory & maroon styling + responsive product cards grid
 │       ├── index.css   # Font imports & base root layout
-│       └── components/ # (Phase 6.2, 6.3, 6.8, 6.9 & 6.10) Reusable child components
+│       ├── reducers/   # (Phase 6.12) Pure state reducers
+│       │   └── cartReducer.js          # Cart action transitions (ADD_TO_CART, INCREMENT, DECREMENT, REMOVE_ITEM, CLEAR_CART)
+│       └── components/ # Reusable child components
 │           ├── Header.jsx              # Modular header component (brand title)
 │           ├── WelcomeSection.jsx      # Modular welcome component (greeting & learning note)
 │           ├── LifecycleDemo.jsx       # (Phase 6.10) Mount, dependency, and timer cleanup demonstration
+│           ├── ReducerLearningSection.jsx # (Phase 6.12) useReducer vs useState architecture cards & blueprint
+│           ├── AddProductForm.jsx      # (Phase 6.11) Controlled form with validation & collision-safe IDs
 │           ├── ProductCard.jsx         # (Phase 6.3) Reusable card (props, modal select, add to cart)
 │           ├── ProductDetailModal.jsx  # (Phase 6.8) Accessible modal with backdrop blur & scroll locking
-│           └── CartSummary.jsx         # (Phase 6.9) Cart summary, quantity controls, reduce() totals
-│   └── LEARNING_NOTES.md # (Phase 6.10) Guide for useEffect, lifecycles, and anti-patterns
+│           └── CartSummary.jsx         # (Phase 6.9 & 6.12) Cart summary, +/− quantity, remove item, reduce() totals
+│   └── LEARNING_NOTES.md # (Phase 6.10 - 6.12) Reference notes for hooks, lifecycles, and useReducer
 └── README.md           # Project guide and progress documentation
 ```
 
@@ -131,5 +137,17 @@ Abhi_Sareee/
    - **Verifiable Cleanup (`clearInterval`)**: Observe the timer seconds ticking every 1s. Click **"Pause Timer"**: status switches to `⏸️ Paused (cleared)` and background ticks halt immediately. Click **"Resume Timer"**: ticks resume cleanly. Click **"Reset"**: seconds return to `0s`.
    - **Live Product Count Banner**: Notice the banner reads `Showing 3 of 3 sarees`. Filter by category (`Silk`, `Cotton`, `Georgette`) or search by query (`Crimson`): notice the count updates instantaneously because it is derived directly during render without redundant effects. Click **"Add Sample Saree"** to see total count increment to `4 sarees`.
    - **Single Document Title Synchronization**: Observe the browser tab title: changes from `Abhi Saree Collection (3 Sarees)` to `Abhi Saree Collection (1 in cart)` when adding items to the cart, with cleanup restoring the prior title on unmount.
-8. **Independent Interaction Test**: Click **"Click Me"** to verify that the original greeting status updates independently without affecting the filtered saree catalog or cart.
-9. Open Browser DevTools (`F12`) to verify zero console errors and zero React key warnings.
+8. **React Forms & Controlled Inputs Test (Phase 6.11)**:
+   - **Validation Error Test**: Click "Add Saree to Collection" with blank inputs. Inline error messages appear for Name, Category, and Price with accessible `role="alert"` semantics.
+   - **Price Rule Test**: Enter "0" or "-500" in Price: validation blocks submission and displays a clear error.
+   - **Valid Submission Test**: Enter name, pick a category, enter a positive price, and submit. The inputs reset, a success banner appears, and the new saree appears in the catalog with a collision-safe UUID.
+   - **Catalog Integration**: Verify the custom saree appears in search, filtering, detail modal, and can be added to the cart.
+9. **React useReducer State Management Test (Phase 6.12)**:
+   - **Learning Section**: View the "React useReducer Learning" section with conceptual cards (useState vs useReducer, dispatch/reducer mechanics, immutability) and the read-only Action Blueprint.
+   - **ADD_TO_CART & Duplicate Prevention**: Click "Add to Cart" on a saree: adds 1 row with quantity 1. Click "Add to Cart" on the same saree again: quantity increments to 2 without creating a duplicate row!
+   - **INCREMENT & DECREMENT**: Click `+` and `−` on cart items: quantity and line totals update predictably. Decrementing to 0 automatically drops the item.
+   - **REMOVE_ITEM Action**: Click the dedicated "Remove" button next to any cart row: the item is immediately removed from state regardless of its quantity.
+   - **CLEAR_CART Action**: Click "Clear Cart": empties the cart and restores the friendly empty-cart notice.
+   - **Dynamic Grand Total**: Notice the cart total is always calculated dynamically during render using `Array.prototype.reduce()`.
+10. **Independent Interaction Test**: Click **"Click Me"** to verify that the original greeting status updates independently without affecting the filtered saree catalog or cart.
+11. Open Browser DevTools (`F12`) to verify zero console errors and zero React key warnings.

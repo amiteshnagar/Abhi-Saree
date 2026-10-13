@@ -7,14 +7,24 @@ function formatINR(amount) {
   return '₹' + amount.toLocaleString('en-IN')
 }
 
-// CONCEPT: Reusable Cart Presentation
+// CONCEPT: Reusable Cart Presentation (Phase 6.12: Driven by useReducer)
 // Receives:
 //   - `cart`: Array of items currently in the cart
 //   - `onUpdateQuantity`: Function to increase (+1) or decrease (-1) an item's count
-//   - `onClearCart`: Function to reset the cart back to an empty array
-function CartSummary({ cart, onUpdateQuantity, onClearCart }) {
+//   - `onIncrement`: Function to dispatch INCREMENT action
+//   - `onDecrement`: Function to dispatch DECREMENT action
+//   - `onRemoveItem`: Function to dispatch REMOVE_ITEM action
+//   - `onClearCart`: Function to dispatch CLEAR_CART action
+function CartSummary({
+  cart,
+  onUpdateQuantity,
+  onIncrement,
+  onDecrement,
+  onRemoveItem,
+  onClearCart,
+}) {
   // CONCEPT 1: Calculating Totals with Array.prototype.reduce()
-  // .reduce() accumulates an entire array into a single computed value.
+  // .reduce() accumulates an entire array into a single computed value during render.
   // It takes:
   //   1. A callback function: (accumulator, currentItem) => updatedAccumulator
   //   2. An initial value: 0
@@ -36,7 +46,7 @@ function CartSummary({ cart, onUpdateQuantity, onClearCart }) {
           {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
         </h3>
         <p className="cart-subtitle">
-          * Managed in React state. Totals calculated dynamically with Array.prototype.reduce().
+          * Managed with React useReducer. Totals calculated dynamically with Array.prototype.reduce().
         </p>
       </div>
 
@@ -65,13 +75,16 @@ function CartSummary({ cart, onUpdateQuantity, onClearCart }) {
                     </span>
                   </div>
 
-                  {/* Quantity Controls */}
+                  {/* Quantity & Item Controls */}
                   <div className="cart-item-controls">
                     <div className="quantity-button-group">
                       <button
                         type="button"
                         className="qty-btn"
-                        onClick={() => onUpdateQuantity(item.id, -1)}
+                        onClick={() => {
+                          if (onDecrement) onDecrement(item.id)
+                          else if (onUpdateQuantity) onUpdateQuantity(item.id, -1)
+                        }}
                         aria-label={`Decrease quantity of ${item.name}`}
                         title="Decrease quantity"
                       >
@@ -88,7 +101,10 @@ function CartSummary({ cart, onUpdateQuantity, onClearCart }) {
                       <button
                         type="button"
                         className="qty-btn"
-                        onClick={() => onUpdateQuantity(item.id, 1)}
+                        onClick={() => {
+                          if (onIncrement) onIncrement(item.id)
+                          else if (onUpdateQuantity) onUpdateQuantity(item.id, 1)
+                        }}
                         aria-label={`Increase quantity of ${item.name}`}
                         title="Increase quantity"
                       >
@@ -103,6 +119,18 @@ function CartSummary({ cart, onUpdateQuantity, onClearCart }) {
                         {formatINR(lineTotal)}
                       </strong>
                     </div>
+
+                    {/* Dedicated Remove Item Button */}
+                    <button
+                      type="button"
+                      className="cart-remove-item-btn"
+                      onClick={() => onRemoveItem && onRemoveItem(item.id)}
+                      aria-label={`Remove ${item.name} from cart`}
+                      title={`Remove ${item.name}`}
+                      data-testid={`remove-item-${item.id}`}
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               )

@@ -225,3 +225,99 @@ setProducts((prevProducts) => [...prevProducts, newSaree])
 | [`src/App.css`](file:///d:/Abhi_Sareee/react-practice/src/App.css) | Ivory and gold form styles, input focus states, error pill styles, and responsive mobile layouts. |
 | [`LEARNING_NOTES.md`](file:///d:/Abhi_Sareee/react-practice/LEARNING_NOTES.md) | Documentation of controlled forms, validation, and collision-safe unique IDs. |
 
+---
+
+## 8. React useReducer State Management (Phase 6.12)
+
+### What is `useReducer`?
+`useReducer` is a built-in React hook for managing complex state transitions:
+```javascript
+const [state, dispatch] = useReducer(reducer, initialState)
+```
+Instead of directly modifying state with multiple setter functions, you **dispatch actions** that describe what happened. The reducer function handles the state transition and returns the next state.
+
+### `useState` versus `useReducer`
+
+| Feature | `useState` | `useReducer` |
+| :--- | :--- | :--- |
+| **Best suited for** | Simple, independent values (e.g. `searchQuery`, `isOpen`, `selectedCategory`) | Complex state with multiple related actions (e.g. Shopping Cart, Multi-step forms) |
+| **State updates** | `setState(newValue)` or `setState(prev => ...)` | `dispatch({ type: 'ACTION_TYPE', payload })` |
+| **Business logic location** | Scattered across multiple component event handlers | Centralized inside a single pure reducer function |
+| **Testability** | Tested through component rendering and user interaction | Reducer can be tested independently as a pure JavaScript function |
+
+### The Reducer Function & Action Object
+A reducer is a pure JavaScript function:
+```javascript
+function cartReducer(state, action) {
+  switch (action.type) {
+    case 'ADD_TO_CART':
+      // return new state
+    default:
+      return state
+  }
+}
+```
+- **`state`**: The current cart array `[]`.
+- **`action`**: A plain object with a descriptive `type` string and optional `payload` data.
+  Example: `{ type: 'ADD_TO_CART', payload: sareeProduct }` or `{ type: 'REMOVE_ITEM', payload: { id: 'saree-1' } }`.
+
+### How Dispatching Actions Updates the Cart
+1. A user clicks "Add to Cart" or "Remove".
+2. The component calls `dispatch({ type: 'ADD_TO_CART', payload: product })`.
+3. React invokes `cartReducer(currentCart, action)`.
+4. The reducer executes the matching `switch` case and returns a brand-new array.
+5. React compares references (`Object.is`), detects the change, and re-renders the component with the new cart.
+
+### Why Reducers Must Not Mutate Existing State
+React uses shallow reference comparison to know when to re-render.
+- If you call `state.push(item)` or `item.quantity++`, the array reference in memory does not change. React thinks nothing happened and will **not** update the screen.
+- By returning a new array (`[...state, newItem]` or `state.map(...)`), the reference changes and React updates the DOM predictably.
+
+### How the Cart Total is Derived Using `reduce()`
+Rather than storing a redundant `total` property in reducer state (which could fall out of sync), the total price and total item count are computed **during rendering**:
+```javascript
+const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
+const totalPrice = cart.reduce((sum, item) => sum + item.quantity * item.numericPrice, 0)
+```
+This guarantees that totals are always 100% synchronized with the cart contents.
+
+### Step-by-Step Walkthrough of `cartReducer.js`
+1. **`ADD_TO_CART`**:
+   - Checks if `action.payload.id` already exists in `state`.
+   - If found: returns `state.map(...)` incrementing `quantity` by 1.
+   - If new: returns `[...state, { ...product, quantity: 1 }]`.
+2. **`INCREMENT`**:
+   - Maps over cart, matching by `id`, and returns `{ ...item, quantity: item.quantity + 1 }`.
+3. **`DECREMENT`**:
+   - Maps over cart, decrementing `quantity - 1`.
+   - Chains `.filter(item => item.quantity > 0)` to automatically drop items when quantity reaches 0.
+4. **`REMOVE_ITEM`**:
+   - Filters out the item matching `action.payload.id` regardless of its current quantity.
+5. **`CLEAR_CART`**:
+   - Returns an empty array `[]`.
+6. **`default`**:
+   - Returns current `state` unchanged for unhandled action types.
+
+### Beginner Practice Questions & Answers
+
+**Q1: Can a reducer perform an API call or `setTimeout`?**
+*Answer:* **No.** A reducer must be a **pure function**. It must only calculate and return the next state based on `(state, action)`. Side effects like API calls or timers belong in `useEffect` or event handlers, never in a reducer.
+
+**Q2: What happens if `action.type` does not match any `case` in the reducer?**
+*Answer:* The `default` branch runs and returns the current `state` unchanged. This prevents crashes and ensures state integrity.
+
+**Q3: When should you choose `useReducer` over `useState`?**
+*Answer:* Choose `useReducer` when you have multiple related state transitions (like adding, incrementing, decrementing, and removing items), when next state depends on complex logic from previous state, or when you want to centralize and test business logic outside of UI components.
+
+### Summary of Files in Phase 6.12
+
+| File | Purpose |
+| :--- | :--- |
+| [`src/reducers/cartReducer.js`](file:///d:/Abhi_Sareee/react-practice/src/reducers/cartReducer.js) | Pure reducer function handling `ADD_TO_CART`, `INCREMENT`, `DECREMENT`, `REMOVE_ITEM`, and `CLEAR_CART` with immutable updates. |
+| [`src/components/ReducerLearningSection.jsx`](file:///d:/Abhi_Sareee/react-practice/src/components/ReducerLearningSection.jsx) | Educational demonstration card explaining `useState` vs `useReducer`, `dispatch`, pure reducer functions, immutability, and action blueprints. |
+| [`src/components/CartSummary.jsx`](file:///d:/Abhi_Sareee/react-practice/src/components/CartSummary.jsx) | Displays cart items, line totals, grand total computed with `reduce()`, and controls for increment, decrement, and dedicated item removal. |
+| [`src/App.jsx`](file:///d:/Abhi_Sareee/react-practice/src/App.jsx) | Initializes `useReducer(cartReducer, initialCartState)`, dispatches cart actions, and renders `<ReducerLearningSection />`. |
+| [`src/App.css`](file:///d:/Abhi_Sareee/react-practice/src/App.css) | Styles for `useReducer` learning cards, action code preview, and the cart remove button. |
+| [`LEARNING_NOTES.md`](file:///d:/Abhi_Sareee/react-practice/LEARNING_NOTES.md) | Comprehensive reference guide for `useReducer`, action architecture, practice Q&A, and step-by-step walkthrough. |
+
+
