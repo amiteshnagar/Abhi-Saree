@@ -11,6 +11,7 @@ import Header from './components/Header.jsx'
 import WelcomeSection from './components/WelcomeSection.jsx'
 import LifecycleDemo from './components/LifecycleDemo.jsx'
 import ReducerLearningSection from './components/ReducerLearningSection.jsx'
+import ContextDemo from './components/ContextDemo.jsx'
 import AddProductForm from './components/AddProductForm.jsx'
 import ProductCard from './components/ProductCard.jsx'
 import ProductDetailModal from './components/ProductDetailModal.jsx'
@@ -19,7 +20,10 @@ import CartSummary from './components/CartSummary.jsx'
 // 3. Import Cart Reducer (Phase 6.12)
 import { cartReducer, initialCartState } from './reducers/cartReducer.js'
 
-// 4. Import CSS styles for the practice card
+// 4. Import Practice Context Provider (Phase 6.13)
+import { PracticeProvider } from './context/PracticeContext.jsx'
+
+// 5. Import CSS styles for the practice card
 import './App.css'
 
 // Categories available for filtering
@@ -280,6 +284,11 @@ function App() {
 
         {/* Child Component: React useReducer Learning Demonstration (Phase 6.12) */}
         <ReducerLearningSection />
+
+        {/* Child Component: React Context API Learning Demonstration (Phase 6.13) */}
+        <PracticeProvider>
+          <ContextDemo />
+        </PracticeProvider>
 
         {/* Child Component 4: Dynamic Product List with Search, Filter, Modal & Cart */}
         <section className="practice-products-section">

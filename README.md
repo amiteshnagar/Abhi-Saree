@@ -28,7 +28,8 @@ Welcome to the **Abhi Saree Collection** website codebase! This project is being
 | **Phase 6.10** | React useEffect & Lifecycle Fundamentals | **Complete** | Added `LifecycleDemo.jsx` demonstrating mount (`[]`), dependency updates (`[actionCount]`), verifiable `clearInterval` timer cleanup on pause/unmount, derived live product count banner calculated directly in render, single `document.title` effect with cleanup restoring previous title, oxlint (0 errors) & vite build verified, and 36/36 browser CDP tests passed with 0 console errors. |
 | **Phase 6.11** | React Forms & Controlled Inputs | **Complete** | Added `AddProductForm.jsx` with controlled inputs (`value` and `onChange`), client-side validation without browser alerts, `event.preventDefault()`, collision-safe `crypto.randomUUID()` unique IDs, oxlint (0 errors) & vite build verified, and 36/36 browser CDP tests passed with 0 console errors. |
 | **Phase 6.12** | React useReducer State Management | **Complete** | Created `src/reducers/cartReducer.js` with pure reducer handling `ADD_TO_CART`, `INCREMENT`, `DECREMENT`, `REMOVE_ITEM`, and `CLEAR_CART` via immutable state transitions, integrated `useReducer` in `App.jsx`, added `ReducerLearningSection.jsx`, dedicated cart remove buttons, oxlint (0 errors) & vite build verified, and 38/38 browser CDP tests passed with 0 console errors. |
-| **Phase 6.13+** | Catalog Expansion & Architecture | *Pending* | Saree sorting (by price/name), checkout flow simulation, and full boutique migration. |
+| **Phase 6.13** | React Context API | **Complete** | Created `src/context/PracticeContext.jsx` with isolated theme state, `<PracticeProvider>`, and custom `usePracticeContext()` hook. Created `src/components/ContextDemo.jsx` demonstrating zero-prop drilling through intermediate layers to nested child badges with active `aria-pressed` synchronization, oxlint (0 errors) & vite build verified, and 40/40 browser CDP tests passed with 0 console errors. |
+| **Phase 6.14+** | Catalog Expansion & Architecture | *Pending* | Saree sorting (by price/name), checkout flow simulation, and full boutique migration. |
 
 ---
 
@@ -49,9 +50,11 @@ Abhi_Sareee/
 │   ├── package.json    # React dependencies & scripts (npm run dev)
 │   └── src/
 │       ├── main.jsx    # React DOM entry point (createRoot)
-│       ├── App.jsx     # Parent orchestrator component (Header, ProductCards, useReducer cart, forms)
+│       ├── App.jsx     # Parent orchestrator component (Header, ProductCards, useReducer cart, Context provider, forms)
 │       ├── App.css     # Practice card ivory & maroon styling + responsive product cards grid
 │       ├── index.css   # Font imports & base root layout
+│       ├── context/    # (Phase 6.13) React Context API
+│       │   └── PracticeContext.jsx     # PracticeContext, PracticeProvider, and custom usePracticeContext hook
 │       ├── reducers/   # (Phase 6.12) Pure state reducers
 │       │   └── cartReducer.js          # Cart action transitions (ADD_TO_CART, INCREMENT, DECREMENT, REMOVE_ITEM, CLEAR_CART)
 │       └── components/ # Reusable child components
@@ -59,11 +62,12 @@ Abhi_Sareee/
 │           ├── WelcomeSection.jsx      # Modular welcome component (greeting & learning note)
 │           ├── LifecycleDemo.jsx       # (Phase 6.10) Mount, dependency, and timer cleanup demonstration
 │           ├── ReducerLearningSection.jsx # (Phase 6.12) useReducer vs useState architecture cards & blueprint
+│           ├── ContextDemo.jsx         # (Phase 6.13) Context theme demonstration with zero-prop intermediate container
 │           ├── AddProductForm.jsx      # (Phase 6.11) Controlled form with validation & collision-safe IDs
 │           ├── ProductCard.jsx         # (Phase 6.3) Reusable card (props, modal select, add to cart)
 │           ├── ProductDetailModal.jsx  # (Phase 6.8) Accessible modal with backdrop blur & scroll locking
 │           └── CartSummary.jsx         # (Phase 6.9 & 6.12) Cart summary, +/− quantity, remove item, reduce() totals
-│   └── LEARNING_NOTES.md # (Phase 6.10 - 6.12) Reference notes for hooks, lifecycles, and useReducer
+│   └── LEARNING_NOTES.md # (Phase 6.10 - 6.13) Reference notes for hooks, lifecycles, useReducer, and Context API
 └── README.md           # Project guide and progress documentation
 ```
 
@@ -149,5 +153,10 @@ Abhi_Sareee/
    - **REMOVE_ITEM Action**: Click the dedicated "Remove" button next to any cart row: the item is immediately removed from state regardless of its quantity.
    - **CLEAR_CART Action**: Click "Clear Cart": empties the cart and restores the friendly empty-cart notice.
    - **Dynamic Grand Total**: Notice the cart total is always calculated dynamically during render using `Array.prototype.reduce()`.
-10. **Independent Interaction Test**: Click **"Click Me"** to verify that the original greeting status updates independently without affecting the filtered saree catalog or cart.
-11. Open Browser DevTools (`F12`) to verify zero console errors and zero React key warnings.
+10. **React Context API Test (Phase 6.13)**:
+   - **Default Theme Verification**: View the "Display Theme Context (No Prop Drilling)" section. Verify the active theme displays as `🏛️ Classic Maroon & Ivory` with `aria-pressed="true"` on the Classic button.
+   - **Zero-Prop Drilling Verification**: Inspect the `Nested Child Component` badge nested inside `Intermediate Layer`. Notice it displays `Classic Royal Maroon & Ivory (classic)` without receiving any theme props from its parent!
+   - **Context Switching Test**: Click **"✨ Festive Gold & Ruby"**. Notice the active theme badge, button highlight (`aria-pressed="true"`), preview box border, and nested child component badge immediately update to the warm golden festive styling.
+   - **Switch Back**: Click **"🏛️ Classic Maroon & Ivory"** to restore the classic theme.
+11. **Independent Interaction Test**: Click **"Click Me"** to verify that the original greeting status updates independently without affecting the filtered saree catalog or cart.
+12. Open Browser DevTools (`F12`) to verify zero console errors and zero React key warnings.

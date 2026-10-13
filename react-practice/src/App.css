@@ -1525,5 +1525,317 @@ body {
   line-height: 1.35;
 }
 
+/* =============================================================================
+   Phase 6.13: React Context API Demonstration Styles
+   ============================================================================= */
 
+.context-demo-section {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem 1.25rem;
+  background: linear-gradient(180deg, #FFFFFF 0%, rgba(253, 251, 247, 0.7) 100%);
+  border: 1.5px solid rgba(201, 161, 92, 0.5);
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(107, 30, 43, 0.05);
+}
 
+.context-header {
+  margin-bottom: 1.25rem;
+}
+
+.context-badge {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  background-color: var(--color-deep-maroon);
+  color: var(--color-white);
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.context-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--color-deep-maroon);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.context-intro {
+  font-size: 0.85rem;
+  color: #5a524e;
+  line-height: 1.45;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* Theme Preview Box */
+.theme-preview-box {
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  text-align: left;
+}
+
+.theme-preview-box.theme-classic {
+  background-color: #fdfbf7;
+  border: 2px solid var(--color-deep-maroon);
+  box-shadow: 0 4px 12px rgba(107, 30, 43, 0.08);
+}
+
+.theme-preview-box.theme-festive {
+  background-color: #fffdf2;
+  border: 2px solid var(--color-antique-gold);
+  box-shadow: 0 4px 16px rgba(201, 161, 92, 0.25);
+}
+
+.theme-status-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #3d3531;
+}
+
+.theme-status-label {
+  color: #6d645f;
+  font-weight: 500;
+}
+
+.current-theme-display {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  background-color: rgba(201, 161, 92, 0.15);
+  border: 1px solid rgba(201, 161, 92, 0.4);
+  border-radius: 6px;
+  color: var(--color-deep-maroon);
+  font-weight: 700;
+}
+
+/* Theme Switcher Buttons */
+.theme-switcher-group {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.theme-btn {
+  flex: 1;
+  min-width: 180px;
+  padding: 0.55rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #ffffff;
+  color: #4a403b;
+  border: 1.5px solid #dcd3cb;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.theme-btn:hover {
+  background-color: #fcf9f5;
+  border-color: var(--color-antique-gold);
+  color: var(--color-deep-maroon);
+}
+
+.theme-btn:focus-visible {
+  outline: 2px solid var(--color-deep-maroon);
+  outline-offset: 2px;
+}
+
+.theme-btn.active {
+  background-color: var(--color-deep-maroon);
+  color: var(--color-white);
+  border-color: var(--color-deep-maroon);
+  box-shadow: 0 2px 6px rgba(107, 30, 43, 0.25);
+}
+
+/* Hierarchy / Zero-Prop Drilling Demonstration */
+.hierarchy-demo-wrapper {
+  border-top: 1px dashed rgba(201, 161, 92, 0.45);
+  padding-top: 1rem;
+}
+
+.hierarchy-heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6d645f;
+  margin-bottom: 0.65rem;
+}
+
+.intermediate-container {
+  background-color: rgba(245, 238, 230, 0.7);
+  border: 1.5px dashed rgba(201, 161, 92, 0.7);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+}
+
+.intermediate-label {
+  margin-bottom: 0.65rem;
+}
+
+.intermediate-chip {
+  display: inline-block;
+  background-color: rgba(107, 30, 43, 0.1);
+  color: var(--color-deep-maroon);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.3rem;
+}
+
+.intermediate-explanation {
+  font-size: 0.78rem;
+  color: #5a524e;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.intermediate-explanation code {
+  background-color: rgba(107, 30, 43, 0.08);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.76rem;
+  color: var(--color-deep-maroon);
+}
+
+/* Nested Child Badge */
+.nested-theme-badge {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  transition: all 0.25s ease;
+}
+
+.nested-theme-badge.theme-classic {
+  background: linear-gradient(135deg, #6b1e2b 0%, #800020 100%);
+  color: #ffffff;
+  border: 1px solid var(--color-antique-gold);
+  box-shadow: 0 2px 8px rgba(107, 30, 43, 0.2);
+}
+
+.nested-theme-badge.theme-festive {
+  background: linear-gradient(135deg, #f4e3c3 0%, #faecd5 100%);
+  color: #4a2800;
+  border: 1.5px solid var(--color-antique-gold);
+  box-shadow: 0 2px 8px rgba(201, 161, 92, 0.3);
+}
+
+.nested-badge-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.nested-badge-icon {
+  font-size: 1rem;
+}
+
+.nested-badge-title {
+  font-size: 0.82rem;
+  letter-spacing: 0.3px;
+}
+
+.nested-theme-badge.theme-classic .nested-badge-title {
+  color: #faecd5;
+}
+
+.nested-theme-badge.theme-festive .nested-badge-title {
+  color: #6b1e2b;
+}
+
+.nested-badge-text {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.nested-theme-badge.theme-classic .nested-badge-text {
+  color: #f7ede2;
+}
+
+.nested-theme-badge.theme-festive .nested-badge-text {
+  color: #3d3531;
+}
+
+.nested-theme-value {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Learning Concept Grid */
+.context-learning-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  text-align: left;
+}
+
+.context-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(201, 161, 92, 0.4);
+  border-radius: 8px;
+  padding: 0.95rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.context-card-icon {
+  font-size: 1.25rem;
+  margin-bottom: 0.35rem;
+}
+
+.context-card-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--color-deep-maroon);
+  margin-bottom: 0.35rem;
+}
+
+.context-card-text {
+  font-size: 0.76rem;
+  color: #5a524e;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.context-card-text code {
+  background-color: rgba(107, 30, 43, 0.08);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.75rem;
+  color: var(--color-deep-maroon);
+}
+
+@media (max-width: 640px) {
+  .context-learning-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .theme-switcher-group {
+    flex-direction: column;
+  }
+
+  .theme-btn {
+    width: 100%;
+    min-width: 0;
+  }
+}

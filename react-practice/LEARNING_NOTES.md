@@ -320,4 +320,115 @@ This guarantees that totals are always 100% synchronized with the cart contents.
 | [`src/App.css`](file:///d:/Abhi_Sareee/react-practice/src/App.css) | Styles for `useReducer` learning cards, action code preview, and the cart remove button. |
 | [`LEARNING_NOTES.md`](file:///d:/Abhi_Sareee/react-practice/LEARNING_NOTES.md) | Comprehensive reference guide for `useReducer`, action architecture, practice Q&A, and step-by-step walkthrough. |
 
+---
+
+## 9. React Context API Fundamentals (Phase 6.13)
+
+### What Context Solves: The Problem of Prop Drilling
+In a hierarchical React application, data normally flows top-down via `props`. When a deeply nested component needs a value that originates several levels above it, every intermediate component along the way must accept that prop and pass it down:
+
+```
+Without Context (Prop Drilling):
+App (holds theme state)
+  └── Dashboard (doesn't care about theme, but must receive & pass theme prop)
+        └── CardWrapper (doesn't care about theme, but must receive & pass theme prop)
+              └── ThemeBadge (uses theme prop!)
+```
+
+This causes several issues:
+1. **Component Coupling**: Intermediate components become tightly coupled to props they do not consume or care about.
+2. **Refactoring Friction**: Renaming or reshaping a prop requires modifying every single intermediate component.
+3. **Boilerplate**: Repetitive prop passing clutters JSX and increases the risk of omissions.
+
+### How React Context Works: Direct Teleportation
+React Context acts like a broadcast tower. A provider broadcasts values down its component subtree, and any descendant component can tap into that broadcast directly:
+
+```
+With React Context:
+App (wraps subtree in <PracticeProvider>)
+  └── IntermediateContainer (receives ZERO theme props!)
+        └── NestedThemeBadge (calls usePracticeContext() directly!)
+```
+
+### The Three Core Building Blocks of React Context
+
+#### 1. `createContext(defaultValue)`
+Creates the Context object.
+```javascript
+const PracticeContext = createContext(undefined)
+```
+- We pass `undefined` as the default value to detect whether a component calls the context hook outside of its provider.
+
+#### 2. `<Context.Provider value={...}>`
+Wraps the component tree (or a specific subtree) and provides the current value to all descendant consumers:
+```jsx
+export function PracticeProvider({ children }) {
+  const [theme, setTheme] = useState('classic')
+
+  return (
+    <PracticeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </PracticeContext.Provider>
+  )
+}
+```
+Whenever `theme` changes, every descendant component subscribed to this context re-renders with the latest value.
+
+#### 3. `useContext(Context)` (or Custom Hook)
+Reads the current context value from the nearest matching `<Context.Provider>` up the tree:
+```javascript
+const { theme, setTheme } = useContext(PracticeContext)
+```
+
+### Why Create a Custom Context Hook (`usePracticeContext`)?
+Instead of exporting `PracticeContext` directly and having components import both `useContext` and the context object, we encapsulate access in a dedicated custom hook:
+```javascript
+export function usePracticeContext() {
+  const context = useContext(PracticeContext)
+  if (context === undefined) {
+    throw new Error('usePracticeContext must be used within a <PracticeProvider>')
+  }
+  return context
+}
+```
+
+**Key Benefits:**
+1. **Fails Fast & Informatively**: If a developer forgets to wrap a component with `<PracticeProvider>`, instead of failing silently with an obscure `Cannot read property 'theme' of undefined`, it immediately throws a clear, actionable error.
+2. **Cleaner Imports**: Consumers only import one hook (`usePracticeContext()`) rather than multiple tokens.
+3. **Encapsulation**: The internal context object and default values remain hidden from consumer components.
+
+### When to Use Context vs. When Ordinary Props are Simpler
+
+| Criteria | Use React Context | Use Standard Props |
+| :--- | :--- | :--- |
+| **Scope** | Global or subtree-wide values (Themes, Auth user, Locale/Language). | Local, component-specific data (Card title, button text, image URL). |
+| **Component Depth** | Passing data down 3+ levels through oblivious intermediaries. | Passing data to direct children or 1–2 levels down. |
+| **Reusability** | Consumer components are expected to operate within the specific context. | Components need to be highly reusable in different parent contexts without assuming a provider. |
+| **Frequency of Updates** | Low to moderate update frequency (theme changes, user sign-in/out). | High-frequency updates (keystrokes, animations, scroll coordinates). |
+
+> [!TIP]
+> **Rule of Thumb**: Start with standard props. If passing props through 3 or more intermediate components feels cumbersome and repetitive, consider Context. Never reach for Context prematurely for simple parent-to-child data flows.
+
+### Beginner Practice Questions & Answers
+
+**Q1: If a component is rendered outside of `<PracticeProvider>`, what does `useContext(PracticeContext)` return?**
+*Answer:* It returns whatever default value was passed to `createContext(defaultValue)`. If `createContext(undefined)` was used, it returns `undefined`. Our custom hook `usePracticeContext()` checks for this and throws an informative error message.
+
+**Q2: Does React Context replace `useState` or `useReducer`?**
+*Answer:* **No.** Context is merely a **transport mechanism** (a broadcast vehicle). The state itself is still managed by `useState` or `useReducer` inside the Provider component. Context simply shares that state across the tree without prop drilling.
+
+**Q3: Does changing a Context value re-render all components inside the Provider?**
+*Answer:* Only components that actually call `useContext()` (or our custom hook) to subscribe to that context will re-render when the context value changes. Intermediate components that do not subscribe to the context will not re-render solely due to the context change.
+
+### Summary of Files in Phase 6.13
+
+| File | Purpose |
+| :--- | :--- |
+| [`src/context/PracticeContext.jsx`](file:///d:/Abhi_Sareee/react-practice/src/context/PracticeContext.jsx) | Declares `PracticeContext`, `PracticeProvider` managing theme state, and the custom `usePracticeContext()` hook with guard checks. |
+| [`src/components/ContextDemo.jsx`](file:///d:/Abhi_Sareee/react-practice/src/components/ContextDemo.jsx) | Interactive demonstration with theme switcher buttons, zero-prop intermediate container, nested child badge, and educational cards. |
+| [`src/App.jsx`](file:///d:/Abhi_Sareee/react-practice/src/App.jsx) | Imports `PracticeProvider` and `ContextDemo`, rendering the scoped provider beneath the reducer learning section. |
+| [`src/App.css`](file:///d:/Abhi_Sareee/react-practice/src/App.css) | Styles for context badges, theme preview box variations (Classic vs Festive), zero-prop hierarchy container, and responsive mobile layouts. |
+| [`LEARNING_NOTES.md`](file:///d:/Abhi_Sareee/react-practice/LEARNING_NOTES.md) | In-depth reference on prop drilling, context mechanics, custom hooks, context vs props criteria, and practice Q&A. |
+
+
 
