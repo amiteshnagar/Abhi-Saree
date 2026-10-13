@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react'
 import Header from './components/Header.jsx'
 import WelcomeSection from './components/WelcomeSection.jsx'
 import LifecycleDemo from './components/LifecycleDemo.jsx'
+import AddProductForm from './components/AddProductForm.jsx'
 import ProductCard from './components/ProductCard.jsx'
 import ProductDetailModal from './components/ProductDetailModal.jsx'
 import CartSummary from './components/CartSummary.jsx'
@@ -19,6 +20,22 @@ import './App.css'
 
 // Categories available for filtering
 const categories = ['All', 'Silk', 'Cotton', 'Georgette']
+
+// Supported product categories based on actual existing product data (Phase 6.11)
+const supportedCategories = [
+  'Banarasi Silk',
+  'Kanjeevaram Silk',
+  'Chanderi Cotton',
+  'Georgette Zari',
+]
+
+// Helper for generating collision-safe unique product IDs
+function generateUniqueId() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return `saree-${crypto.randomUUID()}`
+  }
+  return `saree-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+}
 
 // Initial data array containing the three established demonstration products with numeric prices
 const initialProducts = [
@@ -150,13 +167,28 @@ function App() {
     }
   }, [cart, displayedCount])
 
+  // Adding custom saree from controlled form (Phase 6.11)
+  function handleAddProduct(newSareeData) {
+    const newId = generateUniqueId()
+    const newSaree = {
+      id: newId,
+      name: newSareeData.name,
+      category: newSareeData.category,
+      price: `₹${Number(newSareeData.price).toLocaleString('en-IN')}`,
+      numericPrice: Number(newSareeData.price),
+      description: `Handcrafted ${newSareeData.category} saree with traditional boutique detailing.`,
+    }
+
+    setProducts((prevProducts) => [...prevProducts, newSaree])
+  }
+
   // Appending to Products State with Functional Updates (preserved from Phase 6.5)
   function handleAddSaree() {
     setProducts((prevProducts) => {
       const nextIndex = prevProducts.length
       const template = additionalSampleSarees[(nextIndex - 3) % additionalSampleSarees.length]
 
-      const newId = `saree-${nextIndex + 1}`
+      const newId = generateUniqueId()
 
       const newSaree = {
         id: newId,
@@ -262,7 +294,13 @@ function App() {
             * Search, filter, inspect details, and click &ldquo;Add to Cart&rdquo; to test shopping cart state. Illustrative sample prices.
           </p>
 
-          {/* Action Button: Add Sample Saree */}
+          {/* Child Component: Add Sample Saree Form (Phase 6.11) */}
+          <AddProductForm
+            supportedCategories={supportedCategories}
+            onAddProduct={handleAddProduct}
+          />
+
+          {/* Quick Action Button: Add Sample Saree (Preserved) */}
           <div className="add-saree-action">
             <button
               type="button"

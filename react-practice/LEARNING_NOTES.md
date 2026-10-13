@@ -143,3 +143,85 @@ const totalCount = products.length
 5. **Test Document Title Synchronization:**
    - Look at the browser tab title: it reads `Abhi Saree Collection (3 Sarees)`.
    - Click **"Add to Cart"** on any card: the tab title immediately switches to `Abhi Saree Collection (1 in cart)`.
+
+---
+
+## 7. React Forms, Controlled Inputs & Validation (Phase 6.11)
+
+### What is a Controlled Input?
+In vanilla HTML, form elements manage their own state internally inside the DOM:
+```html
+<!-- DOM manages this value directly -->
+<input id="saree-name" type="text" />
+```
+In React, a **Controlled Input** delegates state management entirely to React:
+```jsx
+const [name, setName] = useState('')
+
+<input
+  type="text"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+/>
+```
+1. **`value={name}`**: The input displays what React state says. React is the single source of truth.
+2. **`onChange={(e) => setName(e.target.value)}`**: Every keystroke fires an event that updates React state, triggering a re-render that displays the updated value.
+
+### Why `event.preventDefault()` is Essential
+When an HTML form is submitted (`<form onSubmit={handleSubmit}>`), the default browser action is to reload the page or navigate away.
+Calling `event.preventDefault()` stops this reload:
+```javascript
+function handleSubmit(event) {
+  event.preventDefault() // Keeps the user on the page!
+  // Perform validation and state updates here
+}
+```
+
+### Client-Side Validation Without Browser Alerts
+Instead of disruptive `window.alert()` dialogs, React validates input state directly and stores error messages in component state:
+```javascript
+const newErrors = {}
+
+if (!name.trim()) {
+  newErrors.name = 'Please enter a saree name.'
+}
+
+if (!category || !supportedCategories.includes(category)) {
+  newErrors.category = 'Please select a valid fabric category from the list.'
+}
+
+if (!price || isNaN(Number(price)) || Number(price) <= 0) {
+  newErrors.price = 'Please enter a valid price greater than ₹0.'
+}
+
+if (Object.keys(newErrors).length > 0) {
+  setErrors(newErrors)
+  return // Halt submission
+}
+```
+Errors are rendered accessibly with `role="alert"` and `aria-invalid="true"`.
+
+### Adding New Products with Collision-Safe Unique IDs
+To avoid ID collisions when adding or removing products, we use `crypto.randomUUID()`:
+```javascript
+function generateUniqueId() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return `saree-${crypto.randomUUID()}`
+  }
+  return `saree-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+}
+```
+The new item is added to React state using an immutable functional update:
+```javascript
+setProducts((prevProducts) => [...prevProducts, newSaree])
+```
+
+### Summary of Files in Phase 6.11
+
+| File | Purpose |
+| :--- | :--- |
+| [`src/components/AddProductForm.jsx`](file:///d:/Abhi_Sareee/react-practice/src/components/AddProductForm.jsx) | Controlled form with name, category, and price inputs, inline validation, and accessible feedback alerts. |
+| [`src/App.jsx`](file:///d:/Abhi_Sareee/react-practice/src/App.jsx) | Manages `supportedCategories`, `generateUniqueId()`, `handleAddProduct` catalogue updater, and renders the form. |
+| [`src/App.css`](file:///d:/Abhi_Sareee/react-practice/src/App.css) | Ivory and gold form styles, input focus states, error pill styles, and responsive mobile layouts. |
+| [`LEARNING_NOTES.md`](file:///d:/Abhi_Sareee/react-practice/LEARNING_NOTES.md) | Documentation of controlled forms, validation, and collision-safe unique IDs. |
+
