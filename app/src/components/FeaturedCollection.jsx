@@ -1,13 +1,16 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { sampleProducts } from '../data/products';
 import ProductSearch from './ProductSearch';
 import CategoryFilter from './CategoryFilter';
 import ProductGrid from './ProductGrid';
+import ProductDetailModal from './ProductDetailModal';
 
 export default function FeaturedCollection() {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const searchInputRef = useRef(null);
+    const triggerButtonRef = useRef(null);
 
     const trimmedQuery = searchQuery.trim().toLowerCase();
 
@@ -26,6 +29,25 @@ export default function FeaturedCollection() {
         setSearchQuery('');
         searchInputRef.current?.focus();
     };
+
+    const handleOpenModal = (product, triggerButton) => {
+        triggerButtonRef.current = triggerButton;
+        setSelectedProduct(product);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedProduct(null);
+    };
+
+    // Safe focus restoration after modal unmount
+    useEffect(() => {
+        if (!selectedProduct && triggerButtonRef.current) {
+            if (typeof triggerButtonRef.current.focus === 'function') {
+                triggerButtonRef.current.focus();
+            }
+            triggerButtonRef.current = null;
+        }
+    }, [selectedProduct]);
 
     return (
         <section
@@ -66,6 +88,13 @@ export default function FeaturedCollection() {
                 products={filteredProducts}
                 searchQuery={searchQuery}
                 onClearSearch={handleClearSearch}
+                onSelectProduct={handleOpenModal}
+            />
+
+            {/* Product Detail Modal */}
+            <ProductDetailModal
+                product={selectedProduct}
+                onClose={handleCloseModal}
             />
         </section>
     );

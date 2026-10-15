@@ -1,6 +1,11 @@
 import ProductCard from './ProductCard';
 
-export default function ProductGrid({ products, searchQuery = '', onClearSearch }) {
+export default function ProductGrid({
+    products,
+    searchQuery = '',
+    onClearSearch,
+    onSelectProduct
+}) {
     const trimmedQuery = searchQuery.trim();
 
     return (
@@ -26,7 +31,11 @@ export default function ProductGrid({ products, searchQuery = '', onClearSearch 
                 )
             ) : (
                 products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                    <ProductCard
+                        key={product.id}
+                        product={product}
+                        onSelectProduct={onSelectProduct}
+                    />
                 ))
             )}
         </div>

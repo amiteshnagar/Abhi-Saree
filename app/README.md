@@ -53,7 +53,31 @@ A modern, production-grade React application replicating and extending the **Abh
   - Explicit `<label htmlFor="saree-search-input">` providing accessible naming without duplicate attributes.
   - Clear search buttons (`✕` in search box and `Clear Search` in empty state) return keyboard focus to the search input via `useRef`.
   - Result counts announced via `role="status"` and `aria-live="polite"`.
-  - Native WebKit search cancel decorations are suppressed to ensure single, accessible clear controls.
+### 3. Product Detail Modal (Phase 8.2.2)
+- **Modal State & Ref Handling**:
+  - Managed in `FeaturedCollection.jsx` using `const [selectedProduct, setSelectedProduct] = useState(null)`.
+  - Triggering button captured via `triggerButtonRef.current` when "View Details" is clicked.
+  - Safe post-unmount focus restoration effect:
+    ```javascript
+    useEffect(() => {
+        if (!selectedProduct && triggerButtonRef.current) {
+            triggerButtonRef.current.focus();
+            triggerButtonRef.current = null;
+        }
+    }, [selectedProduct]);
+    ```
+- **Accessibility & Keyboard Focus Trap**:
+  - `role="dialog"`, `aria-modal="true"`, `aria-labelledby="modal-product-title"`.
+  - Focus is trapped within modal dialog (`Tab` and `Shift+Tab` cycle through modal interactive elements: close button, any links/buttons, and footer dismiss button).
+  - Dismissible via `Escape` key, backdrop click, header close icon (`aria-label="Close product details"`), and footer button.
+  - Click events on dialog content prevent propagation (`e.stopPropagation()`) to avoid accidental dismissals.
+- **Scroll Lock & Restoration**:
+  - `document.body.style.overflow = 'hidden'` applied while dialog is open.
+  - Pre-existing overflow property value recorded and cleanly restored in cleanup function upon close or unmount.
+- **Rich Product Information Display**:
+  - SVG preview illustration, fabric category badge, product name, formatted INR price, and detailed product description.
+- **Compatibility with Search & Category Filters**:
+  - Works seamlessly with active search queries and fabric filters without resetting or losing user state.
 
 ---
 
@@ -83,7 +107,8 @@ app/
 │       ├── ProductSearch.jsx    # Controlled search input with clear & live count
 │       ├── CategoryFilter.jsx   # Fabric category filter pills
 │       ├── ProductGrid.jsx      # Product cards container & contextual empty state
-│       ├── ProductCard.jsx      # Saree card with INR formatting & SVG placeholder
+│       ├── ProductCard.jsx      # Saree card with INR formatting, SVG preview & View Details button
+│       ├── ProductDetailModal.jsx # Accessible modal dialog with focus trap & scroll lock
 │       ├── CategoryHighlights.jsx # 4 category cards
 │       ├── CustomerTrust.jsx    # 3 trust cards
 │       └── Footer.jsx           # Copyright & contact anchor target
@@ -91,7 +116,8 @@ app/
     ├── phase-8-1-implementation-report.md
     ├── phase-8-1-parity-checklist.md
     ├── phase-8-1-visual-comparison.md
-    └── phase-8-2-1-search-report.md
+    ├── phase-8-2-1-search-report.md
+    └── phase-8-2-2-modal-report.md
 ```
 
 ---

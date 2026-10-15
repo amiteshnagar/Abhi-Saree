@@ -1,6 +1,15 @@
+import { useRef } from 'react';
 import { inrCurrencyFormatter } from '../data/products';
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, onSelectProduct }) {
+    const viewButtonRef = useRef(null);
+
+    const handleViewDetails = () => {
+        if (typeof onSelectProduct === 'function') {
+            onSelectProduct(product, viewButtonRef.current);
+        }
+    };
+
     return (
         <article className="product-card">
             <img
@@ -20,6 +29,15 @@ export default function ProductCard({ product }) {
                     </span>
                     <span className="sample-tag">Sample Reference</span>
                 </div>
+                <button
+                    ref={viewButtonRef}
+                    type="button"
+                    className="view-details-btn"
+                    onClick={handleViewDetails}
+                    aria-label={`View details for ${product.name}`}
+                >
+                    View Details
+                </button>
             </div>
         </article>
     );
