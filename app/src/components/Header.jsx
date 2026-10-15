@@ -1,6 +1,11 @@
 import Navigation from './Navigation';
 
-export default function Header({ isMenuOpen, onToggleMenu, onCloseMenu }) {
+export default function Header({
+    isMenuOpen,
+    onToggleMenu,
+    onCloseMenu,
+    totalItems = 0
+}) {
     return (
         <header className="site-header">
             <div className="header-container">
@@ -35,7 +40,11 @@ export default function Header({ isMenuOpen, onToggleMenu, onCloseMenu }) {
                 </button>
 
                 {/* Main Semantic Navigation */}
-                <Navigation isOpen={isMenuOpen} onClose={onCloseMenu} />
+                <Navigation
+                    isOpen={isMenuOpen}
+                    onClose={onCloseMenu}
+                    totalItems={totalItems}
+                />
             </div>
         </header>
     );

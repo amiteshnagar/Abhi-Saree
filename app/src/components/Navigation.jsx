@@ -1,4 +1,4 @@
-export default function Navigation({ isOpen, onClose }) {
+export default function Navigation({ isOpen, onClose, totalItems = 0 }) {
     return (
         <nav
             className={`main-nav ${isOpen ? 'is-open' : ''}`.trim()}
@@ -14,6 +14,11 @@ export default function Navigation({ isOpen, onClose }) {
                 <li>
                     <a href="#collections" className="nav-link" onClick={onClose}>
                         Collections
+                    </a>
+                </li>
+                <li>
+                    <a href="#cart" className="nav-link" onClick={onClose}>
+                        Cart {totalItems > 0 && <span className="nav-cart-badge">{totalItems}</span>}
                     </a>
                 </li>
                 <li>

@@ -5,7 +5,7 @@ import CategoryFilter from './CategoryFilter';
 import ProductGrid from './ProductGrid';
 import ProductDetailModal from './ProductDetailModal';
 
-export default function FeaturedCollection() {
+export default function FeaturedCollection({ onAddToCart }) {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -89,12 +89,14 @@ export default function FeaturedCollection() {
                 searchQuery={searchQuery}
                 onClearSearch={handleClearSearch}
                 onSelectProduct={handleOpenModal}
+                onAddToCart={onAddToCart}
             />
 
             {/* Product Detail Modal */}
             <ProductDetailModal
                 product={selectedProduct}
                 onClose={handleCloseModal}
+                onAddToCart={onAddToCart}
             />
         </section>
     );

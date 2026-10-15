@@ -1,12 +1,23 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { inrCurrencyFormatter } from '../data/products';
 
-export default function ProductCard({ product, onSelectProduct }) {
+export default function ProductCard({ product, onSelectProduct, onAddToCart }) {
     const viewButtonRef = useRef(null);
+    const [isAdded, setIsAdded] = useState(false);
 
     const handleViewDetails = () => {
         if (typeof onSelectProduct === 'function') {
             onSelectProduct(product, viewButtonRef.current);
+        }
+    };
+
+    const handleAddToCart = () => {
+        if (typeof onAddToCart === 'function') {
+            onAddToCart(product);
+            setIsAdded(true);
+            setTimeout(() => {
+                setIsAdded(false);
+            }, 1200);
         }
     };
 
@@ -29,15 +40,25 @@ export default function ProductCard({ product, onSelectProduct }) {
                     </span>
                     <span className="sample-tag">Sample Reference</span>
                 </div>
-                <button
-                    ref={viewButtonRef}
-                    type="button"
-                    className="view-details-btn"
-                    onClick={handleViewDetails}
-                    aria-label={`View details for ${product.name}`}
-                >
-                    View Details
-                </button>
+                <div className="product-actions">
+                    <button
+                        ref={viewButtonRef}
+                        type="button"
+                        className="view-details-btn"
+                        onClick={handleViewDetails}
+                        aria-label={`View details for ${product.name}`}
+                    >
+                        View Details
+                    </button>
+                    <button
+                        type="button"
+                        className={`add-to-cart-btn ${isAdded ? 'is-added' : ''}`.trim()}
+                        onClick={handleAddToCart}
+                        aria-label={`Add ${product.name} to cart`}
+                    >
+                        {isAdded ? '✓ Added' : 'Add to Cart'}
+                    </button>
+                </div>
             </div>
         </article>
     );

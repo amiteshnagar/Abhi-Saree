@@ -4,7 +4,8 @@ export default function ProductGrid({
     products,
     searchQuery = '',
     onClearSearch,
-    onSelectProduct
+    onSelectProduct,
+    onAddToCart
 }) {
     const trimmedQuery = searchQuery.trim();
 
@@ -35,6 +36,7 @@ export default function ProductGrid({
                         key={product.id}
                         product={product}
                         onSelectProduct={onSelectProduct}
+                        onAddToCart={onAddToCart}
                     />
                 ))
             )}

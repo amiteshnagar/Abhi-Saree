@@ -76,8 +76,33 @@ A modern, production-grade React application replicating and extending the **Abh
   - Pre-existing overflow property value recorded and cleanly restored in cleanup function upon close or unmount.
 - **Rich Product Information Display**:
   - SVG preview illustration, fabric category badge, product name, formatted INR price, and detailed product description.
-- **Compatibility with Search & Category Filters**:
-  - Works seamlessly with active search queries and fabric filters without resetting or losing user state.
+### 4. Shopping Cart with React `useReducer` (Phase 8.2.3)
+- **Why `useReducer` for Shopping Cart**:
+  - Managing a shopping cart involves complex, interrelated state transitions (adding items, incrementing quantities, decrementing with auto-removal, removing by ID, clearing everything).
+  - `useReducer` consolidates this multi-action business logic into a single pure function, decoupling state transition rules from individual UI components.
+  - Improves predictability and testability by keeping transitions deterministic: `(currentState, action) => nextState`.
+- **Normalized Cart State**:
+  - The reducer state is strictly normalized to store only product IDs and whole-number quantities:
+    ```javascript
+    [{ id: 'sample-saree-1', quantity: 2 }]
+    ```
+  - Eliminates stale data bugs, avoids duplicating catalog fields, and prevents redundant stored calculations.
+- **Pure Reducer & Supported Actions (`src/reducers/cartReducer.js`)**:
+  - `ADD_ITEM`: Appends `{ id, quantity: 1 }` or increments if existing.
+  - `INCREMENT_QUANTITY`: Immutably increments target item's quantity.
+  - `DECREMENT_QUANTITY`: Decrements quantity; if quantity reaches 0, the item is safely removed.
+  - `REMOVE_ITEM`: Removes target item by ID immediately.
+  - `CLEAR_CART`: Resets state to `[]`.
+- **Derived Totals Without Redundant State**:
+  - Subtotals, total item counts, and grand totals are derived synchronously during render in `App.jsx`:
+    ```javascript
+    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    const grandTotal = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
+    ```
+- **Accessibility & Feedback**:
+  - Saree cards and detail modal provide non-disruptive feedback (`✓ Added` for 1.2s) without intrusive alerts.
+  - Polite live announcements (`role="status"`, `aria-live="polite"`) inform screen reader users of additions, removals, and cart resets.
+  - Quantity controls (`−` and `+`) and `Remove` buttons have descriptive `aria-label` attributes and visible focus rings.
 
 ---
 
@@ -94,21 +119,24 @@ app/
 │       └── logo.png             # Bit-for-bit copy of root logo
 ├── src/
 │   ├── main.jsx                 # StrictMode createRoot entry point
-│   ├── App.jsx                  # Main site layout and menu state orchestrator
+│   ├── App.jsx                  # Main site layout, useReducer cart orchestrator
 │   ├── App.css                  # Parity & feature stylesheets
 │   ├── index.css                # Global variables, fonts, reset
 │   ├── data/
 │   │   └── products.js          # Master product array & currency formatter
+│   ├── reducers/
+│   │   └── cartReducer.js       # Pure cart state reducer (normalized IDs & quantities)
 │   └── components/
-│       ├── Header.jsx           # Brand lockup & mobile menu button
-│       ├── Navigation.jsx       # Semantic nav list with auto-closing links
+│       ├── Header.jsx           # Brand lockup, mobile menu button & cart indicator
+│       ├── Navigation.jsx       # Semantic nav list with auto-closing links & Cart badge
 │       ├── WelcomeSection.jsx   # Welcome copy and boutique status checker
 │       ├── FeaturedCollection.jsx # Featured showcase & search/filter orchestration
 │       ├── ProductSearch.jsx    # Controlled search input with clear & live count
 │       ├── CategoryFilter.jsx   # Fabric category filter pills
 │       ├── ProductGrid.jsx      # Product cards container & contextual empty state
-│       ├── ProductCard.jsx      # Saree card with INR formatting, SVG preview & View Details button
-│       ├── ProductDetailModal.jsx # Accessible modal dialog with focus trap & scroll lock
+│       ├── ProductCard.jsx      # Saree card with INR formatting, View Details & Add to Cart
+│       ├── ProductDetailModal.jsx # Accessible modal dialog with focus trap & Add to Cart
+│       ├── ShoppingCart.jsx     # Responsive cart section with quantity controls & totals
 │       ├── CategoryHighlights.jsx # 4 category cards
 │       ├── CustomerTrust.jsx    # 3 trust cards
 │       └── Footer.jsx           # Copyright & contact anchor target
@@ -117,7 +145,8 @@ app/
     ├── phase-8-1-parity-checklist.md
     ├── phase-8-1-visual-comparison.md
     ├── phase-8-2-1-search-report.md
-    └── phase-8-2-2-modal-report.md
+    ├── phase-8-2-2-modal-report.md
+    └── phase-8-2-3-cart-report.md
 ```
 
 ---

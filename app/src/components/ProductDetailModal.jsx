@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { inrCurrencyFormatter } from '../data/products';
 
-export default function ProductDetailModal({ product, onClose }) {
+export default function ProductDetailModal({ product, onClose, onAddToCart }) {
     const dialogRef = useRef(null);
+    const [isAdded, setIsAdded] = useState(false);
 
     useEffect(() => {
         if (!product) return;
@@ -144,6 +145,20 @@ export default function ProductDetailModal({ product, onClose }) {
                         </div>
 
                         <div className="modal-footer-actions">
+                            <button
+                                type="button"
+                                className={`modal-add-to-cart-btn ${isAdded ? 'is-added' : ''}`.trim()}
+                                onClick={() => {
+                                    if (typeof onAddToCart === 'function') {
+                                        onAddToCart(product);
+                                        setIsAdded(true);
+                                        setTimeout(() => setIsAdded(false), 1200);
+                                    }
+                                }}
+                                aria-label={`Add ${product.name} to cart`}
+                            >
+                                {isAdded ? '✓ Added to Cart' : 'Add to Cart'}
+                            </button>
                             <button
                                 type="button"
                                 className="modal-dismiss-btn"
