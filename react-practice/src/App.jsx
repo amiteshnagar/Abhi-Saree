@@ -3,8 +3,8 @@
 // Phase 6.9: Shopping Cart State & Array.prototype.reduce()
 // =============================================================================
 
-// 1. Import React's useState, useEffect, and useReducer hooks
-import { useState, useEffect, useReducer } from 'react'
+// 1. Import React's useState and useReducer hooks
+import { useState, useReducer } from 'react'
 
 // 2. Import child components
 import Header from './components/Header.jsx'
@@ -23,7 +23,11 @@ import { cartReducer, initialCartState } from './reducers/cartReducer.js'
 // 4. Import Practice Context Provider (Phase 6.13)
 import { PracticeProvider } from './context/PracticeContext.jsx'
 
-// 5. Import CSS styles for the practice card
+// 5. Import Custom Hooks (Phase 6.14)
+import { useProductSearch } from './hooks/useProductSearch.js'
+import { useDocumentTitle } from './hooks/useDocumentTitle.js'
+
+// 6. Import CSS styles for the practice card
 import './App.css'
 
 // Categories available for filtering
@@ -129,20 +133,20 @@ function App() {
   // Independent status message state (preserved from Phase 6.1)
   const [statusMessage, setStatusMessage] = useState('Welcome to React!')
 
-  // Multi-Criteria Filtering with Derived State (preserved from Phase 6.7)
-  const normalizedQuery = searchQuery.trim().toLowerCase()
+  // ===========================================================================
+  // 🎓 CONCEPT 1: Custom Hook for Search (Phase 6.14)
+  // Extracts product search matching logic into a reusable custom hook with useMemo.
+  // Performs case-insensitive matching across product name and category.
+  // ===========================================================================
+  const searchedProducts = useProductSearch(products, searchQuery)
 
-  const filteredProducts = products.filter((product) => {
-    const matchesCategory =
+  // Combined Multi-Criteria Filtering (preserved from Phase 6.7)
+  // Filters search-matched sarees by the selected category tab
+  const filteredProducts = searchedProducts.filter((product) => {
+    return (
       selectedCategory === 'All' ||
       product.category.toLowerCase().includes(selectedCategory.toLowerCase())
-
-    const matchesSearch =
-      normalizedQuery === '' ||
-      product.name.toLowerCase().includes(normalizedQuery) ||
-      product.category.toLowerCase().includes(normalizedQuery)
-
-    return matchesCategory && matchesSearch
+    )
   })
 
   // ===========================================================================
@@ -155,25 +159,18 @@ function App() {
   const totalCount = products.length
 
   // ===========================================================================
-  // 🎓 SINGLE DOCUMENT TITLE EFFECT (Lifecycle & Dependency Demonstration):
-  // Syncs the browser page title with the active cart count and saree count.
-  // - Dependency array [cart, displayedCount]: runs on mount and whenever
-  //   either cart or displayedCount changes.
-  // - Meaningful Cleanup: restores previousTitle when component unmounts or before re-run.
+  // 🎓 CONCEPT 2: Custom Hook for Document Title (Phase 6.14)
+  // Synchronizes browser page title with active cart quantity or displayed count.
+  // Encapsulates useEffect and unmount restoration inside useDocumentTitle.
+  // Replaces inline useEffect to eliminate duplicate title effects!
   // ===========================================================================
-  useEffect(() => {
-    const previousTitle = document.title
-    const totalCartQuantity = cart.reduce((sum, item) => sum + item.quantity, 0)
+  const totalCartQuantity = cart.reduce((sum, item) => sum + item.quantity, 0)
+  const dynamicDocumentTitle =
+    totalCartQuantity > 0
+      ? `Abhi Saree Collection (${totalCartQuantity} in cart)`
+      : `Abhi Saree Collection (${displayedCount} Sarees)`
 
-    document.title =
-      totalCartQuantity > 0
-        ? `Abhi Saree Collection (${totalCartQuantity} in cart)`
-        : `Abhi Saree Collection (${displayedCount} Sarees)`
-
-    return () => {
-      document.title = previousTitle
-    }
-  }, [cart, displayedCount])
+  useDocumentTitle(dynamicDocumentTitle)
 
   // Adding custom saree from controlled form (Phase 6.11)
   function handleAddProduct(newSareeData) {

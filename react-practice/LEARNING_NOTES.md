@@ -430,5 +430,115 @@ export function usePracticeContext() {
 | [`src/App.css`](file:///d:/Abhi_Sareee/react-practice/src/App.css) | Styles for context badges, theme preview box variations (Classic vs Festive), zero-prop hierarchy container, and responsive mobile layouts. |
 | [`LEARNING_NOTES.md`](file:///d:/Abhi_Sareee/react-practice/LEARNING_NOTES.md) | In-depth reference on prop drilling, context mechanics, custom hooks, context vs props criteria, and practice Q&A. |
 
+---
+
+## 10. React Custom Hooks (Phase 6.14)
+
+### What is a Custom Hook?
+A **custom hook** is a standard JavaScript function whose name starts with `"use"` and that can call other React hooks (like `useState`, `useEffect`, `useMemo`, `useRef`, `useReducer`, or `useContext`).
+
+Custom hooks allow developers to extract stateful and lifecycle logic out of UI components into reusable, modular functions.
+
+### Why Must Custom Hooks Begin with `use`?
+1. **React Convention & Lint Enforcement**: The React compiler and ESLint/Oxlint rules use the `"use"` prefix to recognize that a function is a hook.
+2. **Rules of Hooks Enforcement**: React verifies that hooks are only called at the top level of React functions, not inside loops, conditions, or event callbacks. Without the `"use"` prefix, React cannot automatically check if your code follows these rules.
+
+### How Custom Hooks Reuse Logic Without Sharing State
+A crucial concept for beginners:
+> **Custom hooks share *stateful logic*, NOT the state itself.**
+
+When two different components call the same custom hook:
+```jsx
+function SearchBoxA() {
+  const results = useProductSearch(products, queryA) // isolated execution
+}
+
+function SearchBoxB() {
+  const results = useProductSearch(products, queryB) // independent execution
+}
+```
+Each component gets its own independent instance of the hook's internal state, effects, and memoized values. They do **not** share state unless the hook internally reads from a shared React Context.
+
+### How `useProductSearch` Works
+The `useProductSearch(products, searchQuery)` hook encapsulates search filtering:
+```javascript
+export function useProductSearch(products, searchQuery) {
+  return useMemo(() => {
+    if (!Array.isArray(products)) return []
+    const normalizedQuery = (searchQuery || '').trim().toLowerCase()
+    if (!normalizedQuery) return products
+
+    return products.filter((product) => {
+      const nameMatch = product.name?.toLowerCase().includes(normalizedQuery)
+      const categoryMatch = product.category?.toLowerCase().includes(normalizedQuery)
+      return Boolean(nameMatch || categoryMatch)
+    })
+  }, [products, searchQuery])
+}
+```
+- **Inputs**: The product list array and user query string.
+- **`useMemo` Optimization**: Caches the filtered array reference so it only recalculates when `products` or `searchQuery` changes, preventing wasteful filtering on unrelated re-renders.
+- **Normalization**: Trims leading/trailing whitespace and normalizes to lowercase for reliable case-insensitive matching across both saree names and fabric categories.
+- **Graceful Fallback**: Returns the full products array when the query is empty or whitespace-only.
+
+### How `useDocumentTitle` Uses `useEffect`
+The `useDocumentTitle(title, restoreOnUnmount)` hook manages the browser tab title:
+```javascript
+export function useDocumentTitle(title, restoreOnUnmount = true) {
+  const originalTitleRef = useRef(typeof document !== 'undefined' ? document.title : '')
+
+  // Title Update Effect
+  useEffect(() => {
+    if (typeof document !== 'undefined' && title) {
+      document.title = title
+    }
+  }, [title])
+
+  // Unmount Restoration Effect
+  useEffect(() => {
+    const originalTitle = originalTitleRef.current
+    return () => {
+      if (restoreOnUnmount && typeof document !== 'undefined' && originalTitle) {
+        document.title = originalTitle
+      }
+    }
+  }, [restoreOnUnmount])
+}
+```
+- **Avoiding Stale Title Restoration**: In naive implementations, developers write `return () => { document.title = prevTitle }` inside the title updater effect. This causes React to restore the previous title *between every single render*, causing title flicker or stale values.
+- **The Solution**: We separate the updater effect (runs whenever `title` changes) from the cleanup effect (runs strictly when the component unmounts).
+- **Consolidation**: By replacing the raw inline `useEffect` in `App.jsx` with `useDocumentTitle`, we eliminate duplicate title effects.
+
+### The Rules of Hooks & Common Mistakes
+1. **Only Call Hooks at the Top Level**:
+   - ❌ Never call hooks inside `if` statements, loops (`for`, `while`), or nested functions.
+   - ✅ Always call hooks at the top level of your component or custom hook before any early returns.
+   - *Why?* React relies on the exact call order of hooks across renders to match state with the correct hook index.
+2. **Only Call Hooks from React Functions**:
+   - ❌ Do not call hooks in regular utility functions (functions not named `use...`).
+   - ✅ Call hooks from React functional components or other custom hooks.
+
+### Beginner Practice Questions & Answers
+
+**Q1: Can a custom hook return JSX?**
+*Answer:* Yes, but typically hooks return data, state, or updater functions (like arrays or objects). If a hook returns JSX elements, it is often better designed as a regular React component.
+
+**Q2: What is the difference between a custom hook and a regular helper function?**
+*Answer:* A helper function only executes standard JavaScript logic (math, formatting, string manipulation). A custom hook can invoke React hooks (`useState`, `useEffect`, `useMemo`, `useRef`), tying into React's lifecycle and reactivity system.
+
+**Q3: Does calling `useProductSearch` create a new copy of the products in memory?**
+*Answer:* When the search query is empty, it returns the exact same `products` reference. When a query is present, `.filter()` creates a new array of references to the matching product objects without mutating the original products state.
+
+### Summary of Files in Phase 6.14
+
+| File | Purpose |
+| :--- | :--- |
+| [`src/hooks/useProductSearch.js`](file:///d:/Abhi_Sareee/react-practice/src/hooks/useProductSearch.js) | Custom hook encapsulating case-insensitive product search matching with `useMemo`. |
+| [`src/hooks/useDocumentTitle.js`](file:///d:/Abhi_Sareee/react-practice/src/hooks/useDocumentTitle.js) | Reusable hook synchronizing browser window/tab title with React state, with clean unmount restoration. |
+| [`src/App.jsx`](file:///d:/Abhi_Sareee/react-practice/src/App.jsx) | Integrated `useProductSearch` and `useDocumentTitle`, removing the duplicate title effect and consolidating multi-criteria filtering. |
+| [`LEARNING_NOTES.md`](file:///d:/Abhi_Sareee/react-practice/LEARNING_NOTES.md) | Added Section 10 explaining custom hooks, Rules of Hooks, `useMemo` caching, lifecycle encapsulation, and practice Q&A. |
+| [`README.md`](file:///d:/Abhi_Sareee/README.md) | Updated Phase 6.14 progress table, directory tree, and test verification guide. |
+
+
 
 

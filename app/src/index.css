@@ -1,0 +1,52 @@
+/* ==========================================================================
+   Abhi Saree Collection — Global Stylesheet (Phase 8.1 React Parity)
+   Brand Palette:
+     - Warm Ivory:    #FAF6F0 (Page background & light accents)
+     - Deep Maroon:   #6B1E2B (Headings & primary brand colour)
+     - Antique Gold:  #C9A15C (Borders, divider lines & subtle accents)
+     - Warm Charcoal: #2B2523 (Body text & secondary text)
+   ========================================================================== */
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* CSS Variables (Design Tokens) */
+:root {
+    --color-warm-ivory: #FAF6F0;
+    --color-deep-maroon: #6B1E2B;
+    --color-antique-gold: #C9A15C;
+    --color-warm-charcoal: #2B2523;
+    --color-white: #FFFFFF;
+    
+    --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* CSS Reset & Box Sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: var(--color-warm-ivory);
+    color: var(--color-warm-charcoal);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}

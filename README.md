@@ -29,7 +29,8 @@ Welcome to the **Abhi Saree Collection** website codebase! This project is being
 | **Phase 6.11** | React Forms & Controlled Inputs | **Complete** | Added `AddProductForm.jsx` with controlled inputs (`value` and `onChange`), client-side validation without browser alerts, `event.preventDefault()`, collision-safe `crypto.randomUUID()` unique IDs, oxlint (0 errors) & vite build verified, and 36/36 browser CDP tests passed with 0 console errors. |
 | **Phase 6.12** | React useReducer State Management | **Complete** | Created `src/reducers/cartReducer.js` with pure reducer handling `ADD_TO_CART`, `INCREMENT`, `DECREMENT`, `REMOVE_ITEM`, and `CLEAR_CART` via immutable state transitions, integrated `useReducer` in `App.jsx`, added `ReducerLearningSection.jsx`, dedicated cart remove buttons, oxlint (0 errors) & vite build verified, and 38/38 browser CDP tests passed with 0 console errors. |
 | **Phase 6.13** | React Context API | **Complete** | Created `src/context/PracticeContext.jsx` with isolated theme state, `<PracticeProvider>`, and custom `usePracticeContext()` hook. Created `src/components/ContextDemo.jsx` demonstrating zero-prop drilling through intermediate layers to nested child badges with active `aria-pressed` synchronization, oxlint (0 errors) & vite build verified, and 40/40 browser CDP tests passed with 0 console errors. |
-| **Phase 6.14+** | Catalog Expansion & Architecture | *Pending* | Saree sorting (by price/name), checkout flow simulation, and full boutique migration. |
+| **Phase 6.14** | React Custom Hooks | **Complete** | Created `src/hooks/useProductSearch.js` (case-insensitive memoized search) and `src/hooks/useDocumentTitle.js` (lifecycle window/tab title sync with unmount restoration). Integrated both hooks into `App.jsx`, cleanly removing the duplicate title effect, oxlint (0 errors) & vite build verified, and 30/30 browser CDP tests passed with 0 console errors. |
+| **Phase 6.15+** | Catalog Expansion & Architecture | *Pending* | Saree sorting (by price/name), checkout flow simulation, and full boutique migration. |
 
 ---
 
@@ -50,9 +51,12 @@ Abhi_Sareee/
 │   ├── package.json    # React dependencies & scripts (npm run dev)
 │   └── src/
 │       ├── main.jsx    # React DOM entry point (createRoot)
-│       ├── App.jsx     # Parent orchestrator component (Header, ProductCards, useReducer cart, Context provider, forms)
+│       ├── App.jsx     # Parent orchestrator component (Header, ProductCards, useReducer cart, Context provider, custom hooks, forms)
 │       ├── App.css     # Practice card ivory & maroon styling + responsive product cards grid
 │       ├── index.css   # Font imports & base root layout
+│       ├── hooks/      # (Phase 6.14) Reusable custom hooks
+│       │   ├── useProductSearch.js     # Memoized product search matching hook
+│       │   └── useDocumentTitle.js     # Lifecycle document.title synchronization hook
 │       ├── context/    # (Phase 6.13) React Context API
 │       │   └── PracticeContext.jsx     # PracticeContext, PracticeProvider, and custom usePracticeContext hook
 │       ├── reducers/   # (Phase 6.12) Pure state reducers
@@ -67,7 +71,7 @@ Abhi_Sareee/
 │           ├── ProductCard.jsx         # (Phase 6.3) Reusable card (props, modal select, add to cart)
 │           ├── ProductDetailModal.jsx  # (Phase 6.8) Accessible modal with backdrop blur & scroll locking
 │           └── CartSummary.jsx         # (Phase 6.9 & 6.12) Cart summary, +/− quantity, remove item, reduce() totals
-│   └── LEARNING_NOTES.md # (Phase 6.10 - 6.13) Reference notes for hooks, lifecycles, useReducer, and Context API
+│   └── LEARNING_NOTES.md # (Phase 6.10 - 6.14) Reference notes for hooks, lifecycles, useReducer, Context API, and custom hooks
 └── README.md           # Project guide and progress documentation
 ```
 
@@ -158,5 +162,9 @@ Abhi_Sareee/
    - **Zero-Prop Drilling Verification**: Inspect the `Nested Child Component` badge nested inside `Intermediate Layer`. Notice it displays `Classic Royal Maroon & Ivory (classic)` without receiving any theme props from its parent!
    - **Context Switching Test**: Click **"✨ Festive Gold & Ruby"**. Notice the active theme badge, button highlight (`aria-pressed="true"`), preview box border, and nested child component badge immediately update to the warm golden festive styling.
    - **Switch Back**: Click **"🏛️ Classic Maroon & Ivory"** to restore the classic theme.
-11. **Independent Interaction Test**: Click **"Click Me"** to verify that the original greeting status updates independently without affecting the filtered saree catalog or cart.
-12. Open Browser DevTools (`F12`) to verify zero console errors and zero React key warnings.
+11. **React Custom Hooks Test (Phase 6.14)**:
+    - **`useProductSearch` Hook**: Type `"Temple"` or `"Cotton"` in the search box to verify case-insensitive matching across both saree names and fabric categories. Type `"bAnArAsI"` to verify mixed-case normalization. Clear the search box to verify that the original product catalog is smoothly restored.
+    - **Combined Category & Custom Hook Search**: Select the `"Silk"` category tab and search `"Crimson"`. Verify that `useProductSearch` works seamlessly in tandem with category filtering.
+    - **`useDocumentTitle` Hook**: Observe the browser tab title. Verify it dynamically reflects `Abhi Saree Collection (3 Sarees)` upon page load, updates to `Abhi Saree Collection (1 Sarees)` when filtered, and switches to `Abhi Saree Collection (1 in cart)` when sarees are added to the cart, with zero duplicate effects.
+12. **Independent Interaction Test**: Click **"Click Me"** to verify that the original greeting status updates independently without affecting the filtered saree catalog or cart.
+13. Open Browser DevTools (`F12`) to verify zero console errors and zero React key warnings.
