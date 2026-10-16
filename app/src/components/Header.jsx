@@ -1,4 +1,5 @@
 import Navigation from './Navigation';
+import { WHATSAPP_PHONE_NUMBER, WHATSAPP_DEFAULT_GREETING } from '../utils/whatsapp';
 
 export default function Header({
     isMenuOpen,
@@ -6,10 +7,36 @@ export default function Header({
     onCloseMenu,
     totalItems = 0
 }) {
+    const announcementWhatsappUrl = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent(WHATSAPP_DEFAULT_GREETING)}`;
+
     return (
         <header className="site-header">
+            {/* Top Announcement Bar */}
+            <div className="top-announcement-bar">
+                <div className="announcement-content">
+                    <span className="announcement-item">
+                        Curated Handloom &amp; Festive Saree Showcase
+                    </span>
+                    <span className="announcement-divider" aria-hidden="true">•</span>
+                    <span className="announcement-item announcement-secondary">
+                        Personal Consultations
+                    </span>
+                    <span className="announcement-divider announcement-secondary" aria-hidden="true">•</span>
+                    <a
+                        href={announcementWhatsappUrl}
+                        className="announcement-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Enquire on WhatsApp at 919340263875"
+                    >
+                        WhatsApp: +91 93402 63875
+                    </a>
+                </div>
+            </div>
+
+            {/* Main Header Container */}
             <div className="header-container">
-                {/* Brand Identity: Official Logo and Business Name */}
+                {/* Brand Identity: Official Logo, Business Name & Subtitle */}
                 <div className="brand">
                     <img
                         src="/logo/logo.png"
@@ -18,7 +45,10 @@ export default function Header({
                         width="60"
                         height="60"
                     />
-                    <h1 className="brand-name">Abhi Saree Collection</h1>
+                    <div className="brand-text">
+                        <h1 className="brand-name">Abhi Saree Collection</h1>
+                        <span className="brand-subtitle">Curated Sarees &amp; Festive Weaves</span>
+                    </div>
                 </div>
 
                 {/* Mobile Navigation Toggle Button (Phase 5.2 Parity) */}
@@ -49,3 +79,4 @@ export default function Header({
         </header>
     );
 }
+

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { inrCurrencyFormatter } from '../data/products';
+import { buildProductEnquiryUrl } from '../utils/whatsapp';
 
 export default function ProductDetailModal({ product, onClose, onAddToCart }) {
     const dialogRef = useRef(null);
@@ -145,6 +146,15 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }) {
                         </div>
 
                         <div className="modal-footer-actions">
+                            <a
+                                href={buildProductEnquiryUrl(product)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="modal-whatsapp-btn"
+                                aria-label={`Enquire about ${product.name} on WhatsApp`}
+                            >
+                                Enquire on WhatsApp
+                            </a>
                             <button
                                 type="button"
                                 className={`modal-add-to-cart-btn ${isAdded ? 'is-added' : ''}`.trim()}

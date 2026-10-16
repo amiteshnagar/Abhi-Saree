@@ -55,7 +55,8 @@ export default function FeaturedCollection({ onAddToCart }) {
             className="featured-section"
             aria-labelledby="collections-heading"
         >
-            <div className="section-header">
+            <div className="section-header collections-header">
+                <span className="section-eyebrow">Handloom Catalog</span>
                 <h2 id="collections-heading" className="section-title">
                     Featured Saree Collection
                 </h2>

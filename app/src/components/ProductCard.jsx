@@ -29,6 +29,7 @@ export default function ProductCard({ product, onSelectProduct, onAddToCart }) {
                 alt={product.imageAlt}
                 width="400"
                 height="450"
+                loading="lazy"
             />
             <div className="product-content">
                 <span className="product-category">{product.category}</span>

@@ -104,6 +104,26 @@ A modern, production-grade React application replicating and extending the **Abh
   - Polite live announcements (`role="status"`, `aria-live="polite"`) inform screen reader users of additions, removals, and cart resets.
   - Quantity controls (`−` and `+`) and `Remove` buttons have descriptive `aria-label` attributes and visible focus rings.
 
+### 5. WhatsApp Ordering & Product Enquiry (Phase 8.2.4)
+- **Direct WhatsApp Click-to-Chat Integration**:
+  - Official format: `https://wa.me/919340263875?text=...`
+  - Confirmed Recipient: `919340263875`
+  - Confirmed Default Greeting: `Namaste! I’m interested in a saree from Abhi Saree Collection. Please share more details.`
+- **Product Enquiry Flow (`ProductDetailModal.jsx`)**:
+  - Customers can click "Enquire on WhatsApp" directly inside the product modal dialog.
+  - Automatically generates an enquiry with store name, product title, fabric category, formatted INR price, and stock confirmation request.
+  - Participates seamlessly in the modal keyboard focus trap loop (`Tab` / `Shift+Tab`).
+- **Cart-Level WhatsApp Order Generation (`ShoppingCart.jsx`)**:
+  - Summarizes the active cart into an itemized, numbered list with unit prices, quantities, and line subtotals.
+  - Displays total pieces and grand total in INR.
+  - Re-evaluates dynamically whenever cart items or quantities change.
+- **Strict URL Encoding**:
+  - All generated messages are strictly encoded using `encodeURIComponent`, preserving spaces, line breaks (`%0A`), and Indian rupee currency symbols (`%E2%82%B9`).
+- **Shop Confirmation Requirement**:
+  - Communicates clearly that this action submits an enquiry/order request rather than a final processed payment, allowing the boutique to verify handcrafted stock availability and coordinate shipping.
+- **Safe Empty-Cart Protection**:
+  - When the cart has 0 items, the WhatsApp order button is rendered in a disabled state (`disabled`, `aria-disabled="true"`) accompanied by a clear notice advising customers to add a saree first.
+
 ---
 
 ## Directory Structure
@@ -124,6 +144,8 @@ app/
 │   ├── index.css                # Global variables, fonts, reset
 │   ├── data/
 │   │   └── products.js          # Master product array & currency formatter
+│   ├── utils/
+│   │   └── whatsapp.js          # WhatsApp click-to-chat URL & message builders
 │   ├── reducers/
 │   │   └── cartReducer.js       # Pure cart state reducer (normalized IDs & quantities)
 │   └── components/
@@ -135,8 +157,8 @@ app/
 │       ├── CategoryFilter.jsx   # Fabric category filter pills
 │       ├── ProductGrid.jsx      # Product cards container & contextual empty state
 │       ├── ProductCard.jsx      # Saree card with INR formatting, View Details & Add to Cart
-│       ├── ProductDetailModal.jsx # Accessible modal dialog with focus trap & Add to Cart
-│       ├── ShoppingCart.jsx     # Responsive cart section with quantity controls & totals
+│       ├── ProductDetailModal.jsx # Modal with focus trap, Add to Cart & WhatsApp enquiry
+│       ├── ShoppingCart.jsx     # Responsive cart with quantity controls, totals & WhatsApp order
 │       ├── CategoryHighlights.jsx # 4 category cards
 │       ├── CustomerTrust.jsx    # 3 trust cards
 │       └── Footer.jsx           # Copyright & contact anchor target
@@ -146,7 +168,8 @@ app/
     ├── phase-8-1-visual-comparison.md
     ├── phase-8-2-1-search-report.md
     ├── phase-8-2-2-modal-report.md
-    └── phase-8-2-3-cart-report.md
+    ├── phase-8-2-3-cart-report.md
+    └── phase-8-2-4-whatsapp-report.md
 ```
 
 ---

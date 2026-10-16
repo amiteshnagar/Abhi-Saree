@@ -1,4 +1,5 @@
 import { inrCurrencyFormatter } from '../data/products';
+import { buildCartOrderUrl } from '../utils/whatsapp';
 
 export default function ShoppingCart({
     cartItems = [],
@@ -9,6 +10,7 @@ export default function ShoppingCart({
     onRemoveItem,
     onClearCart
 }) {
+    const whatsappOrderUrl = buildCartOrderUrl(cartItems, totalItems, grandTotal);
     return (
         <section
             id="cart"
@@ -39,9 +41,26 @@ export default function ShoppingCart({
                         <p className="empty-cart-text">
                             Explore our curated handloom collection above and click &ldquo;Add to Cart&rdquo; to reserve your favourite sarees.
                         </p>
-                        <a href="#collections" className="browse-collection-btn">
-                            Browse Saree Collection
-                        </a>
+                        <div className="empty-cart-actions-group">
+                            <a href="#collections" className="browse-collection-btn">
+                                Browse Saree Collection
+                            </a>
+                            <div className="empty-cart-whatsapp-box">
+                                <button
+                                    type="button"
+                                    className="cart-whatsapp-order-btn is-disabled"
+                                    disabled
+                                    aria-disabled="true"
+                                    aria-label="Order on WhatsApp (Disabled: cart is empty)"
+                                    title="Add a saree to your cart to order via WhatsApp"
+                                >
+                                    Order on WhatsApp
+                                </button>
+                                <p className="empty-cart-whatsapp-note">
+                                    Please add a saree to your cart before placing an order on WhatsApp.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 ) : (
                     <div className="cart-content-wrapper">
@@ -141,6 +160,15 @@ export default function ShoppingCart({
                             </div>
 
                             <div className="cart-summary-actions">
+                                <a
+                                    href={whatsappOrderUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="cart-whatsapp-order-btn"
+                                    aria-label="Order selected sarees on WhatsApp"
+                                >
+                                    Order on WhatsApp
+                                </a>
                                 <button
                                     type="button"
                                     className="cart-clear-btn"
